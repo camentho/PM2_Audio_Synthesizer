@@ -6,7 +6,7 @@
 -- Author     : Hans-Joachim Gelke
 -- Company    : 
 -- Created    : 2018-03-08
--- Last update: 2022-02-24
+-- Last update: 2022-03-30
 -- Platform   : 
 -- Standard   : VHDL'08
 -------------------------------------------------------------------------------
@@ -15,10 +15,10 @@
 -- Copyright (c) 2018 
 -------------------------------------------------------------------------------
 -- Revisions  :
--- Date        Version  Author  Description
--- 2018-03-08  1.0      Hans-Joachim    Created
+-- Date        Version  Author				Description
+-- 2018-03-08  1.0      Hans-Joachim		Created
+-- 2022-03-30  1.1		Roser					Customization	 
 -------------------------------------------------------------------------------
-
 library ieee;
 use ieee.std_logic_1164.all;
 library work;
@@ -28,27 +28,27 @@ use ieee.numeric_std.all;
 entity synthi_top is
 
   port (
-    CLOCK_50 	 : in std_logic;            -- DE2 clock from xtal 50MHz
-    KEY_0    	 : in std_logic;            -- DE2 low_active input buttons
-    KEY_1   	 : in std_logic;            -- DE2 low_active input buttons
-    SW      	 : in std_logic_vector(2 downto 0);  -- DE2 input switches
+    CLOCK_50 	 : in std_logic;            			  -- DE2 clock from xtal 50MHz
+    KEY_0    	 : in std_logic;            			  -- DE2 low_active input buttons
+    KEY_1   	 : in std_logic;           			  -- DE2 low_active input buttons
+    SW      	 : in std_logic_vector(2 downto 0);   -- DE2 input switches
 
-    USB_RXD 	 : in std_logic;            -- USB (midi) serial_input
-    USB_TXD		 : in std_logic;            -- USB (midi) serial_output
+    USB_RXD 	 : in std_logic;           			  -- USB (midi) serial_input
+    USB_TXD		 : in std_logic;            			  -- USB (midi) serial_output
 
-    BT_RXD  	 : in std_logic;            -- Bluetooth serial_input
-    BT_TXD  	 : in std_logic;            -- Bluetooth serial_output
-    BT_RST_N 	 : in std_logic;            -- Bluetooth reset_n
+    BT_RXD  	 : in std_logic;            			  -- Bluetooth serial_input
+    BT_TXD  	 : in std_logic;           			  -- Bluetooth serial_output
+    BT_RST_N 	 : in std_logic;            			  -- Bluetooth reset_n
 
-    AUD_XCK     : out std_logic;           -- master clock for Audio Codec
-    AUD_DACDAT  : out std_logic;           -- audio serial data to Codec-DAC
-    AUD_BCLK    : out std_logic;           -- bit clock for audio serial data
-    AUD_DACLRCK : out std_logic;           -- left/right word select for Codec-DAC
-    AUD_ADCLRCK : out std_logic;           -- left/right word select for Codec-ADC
-    AUD_ADCDAT  : in  std_logic;           -- audio serial data from Codec-ADC
+	 AUD_ADCDAT  : in  std_logic;           			  -- audio serial data from Codec-ADC
+    AUD_XCK     : out std_logic;          			  -- master clock for Audio Codec
+    AUD_DACDAT  : out std_logic;              		  -- audio serial data to Codec-DAC
+    AUD_BCLK    : out std_logic;          			  -- bit clock for audio serial data
+    AUD_DACLRCK : out std_logic;           			  -- left/right word select for Codec-DAC
+    AUD_ADCLRCK : out std_logic;           			  -- left/right word select for Codec-ADC
 
-    AUD_SCLK 	 : out std_logic;           -- clock from I2C master block
-    AUD_SDAT 	 : inout std_logic;         -- data         from I2C master block
+    AUD_SCLK 	 : out std_logic;           			  -- clock from I2C master block
+    AUD_SDAT 	 : inout std_logic;         			  -- data         from I2C master block
 
     HEX0   		 : out std_logic_vector(6 downto 0);  -- output for HEX 0 display
     HEX1  		 : out std_logic_vector(6 downto 0);  -- output for HEX 0 display
@@ -101,13 +101,13 @@ architecture struct of synthi_top is
 
   component uart_top is
     port (
-      clk_6M       : in  std_logic;                     -- clock
-      reset_n      : in  std_logic;                     -- int reset
-      serial_in    : in  std_logic;                     -- data input
-      hex0         : out std_logic_vector(6 downto 0);  -- Display 0
-      hex1         : out std_logic_vector(6 downto 0);  -- Display 1
-      rx_data      : out std_logic_vector(7 downto 0);  -- recieverd data
-      rx_data_rdy  : out std_logic);                    -- data ready
+      clk_6M       : in  std_logic;                      -- clock
+      reset_n      : in  std_logic;                      -- int reset
+      serial_in    : in  std_logic;                      -- data input
+      hex0         : out std_logic_vector(6 downto 0);   -- Display 0
+      hex1         : out std_logic_vector(6 downto 0);   -- Display 1
+      rx_data      : out std_logic_vector(7 downto 0);   -- recieverd data
+      rx_data_rdy  : out std_logic);                     -- data ready
   end component uart_top;
   
   component codec_controller is 
@@ -137,9 +137,9 @@ architecture struct of synthi_top is
 
 begin
 
------------------------------------------------------------------------------
-  -- Architecture Description
------------------------------------------------------------------------------
+	-----------------------------------------------------------------------------
+	-- Architecture Description
+	-----------------------------------------------------------------------------
 
   inst0 : Infrastructure
     port map (
@@ -183,7 +183,8 @@ begin
 		write_data_o => write_data,
 		write_done_i => write_done,
 		ack_error_i => ack_error
-		);	
+		);
+
 
 end architecture struct;
 

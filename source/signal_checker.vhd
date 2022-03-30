@@ -7,7 +7,7 @@
 -- Function: fsm and registers for UART-RX in DTP1 Mini-project alternative implementation.
 --                      This block is the central piece of the UART-RX, coordinating byte reception and storage of 1 byte.
 -------------------------------------------
-
+-- eins
 -- Library & Use Statements
 -------------------------------------------
 library ieee;
@@ -27,7 +27,7 @@ end signal_checker;
 -- Architecture Declaration
 -------------------------------------------
 architecture rtl of signal_checker is
--- Signals & Constants Declaration�
+-- Signals & Constants Declaration 
 -------------------------------------------
 
  constant width : positive := 22;
