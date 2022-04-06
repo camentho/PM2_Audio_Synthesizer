@@ -2,9 +2,9 @@
 -- Project     : Audio_Synthesizer
 --
 -- File Name   : digital_loop.vhd
--- Description : Multiplexer für die parallelen Daten des i2s_master.vhd
+-- Description : Multiplexer fï¿½r die parallelen Daten des i2s_master.vhd
 --                                      Bei Digital-Loop werden die Daten des i2s_master direkt
---                                      an ihn zurückgegeben, bei aktivem synthesizer werden die
+--                                      an ihn zurï¿½ckgegeben, bei aktivem synthesizer werden die
 --                                      Daten des synthesizer an den i2s_master gesendet.
 --
 --------------------------------------------------------------------
@@ -22,10 +22,11 @@ use ieee.std_logic_1164.all;
 
 
 entity path_control is
-  port(sw_sync_3      : in  std_logic;  --Wahl des Path
-            -- Audio data generated inside FPGA
-       dds_l_i : in  std_logic_vector(15 downto 0);  --Eingang vom Synthesizer
-       dds_r_i : in  std_logic_vector(15 downto 0);
+  port(
+		 sw_sync_3   : in  std_logic;  							--Wahl des Path
+       -- Audio data generated inside FPGA
+       dds_l_i 	 : in  std_logic_vector(15 downto 0);  --Eingang vom Synthesizer
+       dds_r_i 	 : in  std_logic_vector(15 downto 0);
        -- Audio data coming from codec
        adcdat_pl_i : in  std_logic_vector(15 downto 0);  --Eingang vom i2s_master
        adcdat_pr_i : in  std_logic_vector(15 downto 0);
@@ -38,8 +39,24 @@ end path_control;
 
 architecture comb of path_control is
 
+-------------------------------------------------------------------------------
+-- Constant Declaration
+-------------------------------------------------------------------------------
 
 
+-------------------------------------------------------------------------------
+-- Type Declaration
+-------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------
+-- Signal Declaration
+-------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------
+-- Begin Architecture
+-------------------------------------------------------------------------------
 begin
 
 
