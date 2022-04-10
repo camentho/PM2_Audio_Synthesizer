@@ -59,6 +59,14 @@ architecture comb of path_control is
 -------------------------------------------------------------------------------
 begin
 
+	if (S <= "0") then
+		dds_l_i <= dacdat_pl_o;
+		dds_r_i <= dacdat_pr_o;
+	elsif (S <= "1") then
+		adcdat_pl_i <= dacdat_pl_o;
+		adcdat_pr_i <= dacdat_pr_o;
+	end if;
+
 
 
 
