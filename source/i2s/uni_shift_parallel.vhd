@@ -18,10 +18,10 @@ library ieee;
 
 entity uni_shift_parallel is
         port(
-            clk     : in std_logic;
-		      reset_n : in std_logic;
-				ser_in  : in std_logic;
-				enable  : in std_logic;
+            clk     : in  std_logic;
+		      reset_n : in  std_logic;
+				ser_in  : in  std_logic;
+				enable  : in  std_logic;
 				par_out : out std_logic_vector(15 downto 0)
         );
 end entity;
@@ -39,7 +39,7 @@ architecture rtl of uni_shift_parallel is
 	
 begin
   
-    --Reset Funktion und Clock-Signal überprüft
+    --Reset and Clock-Signal
    shift_dffs : process(all)
    begin
      if reset_n = '0' then
@@ -49,19 +49,17 @@ begin
      end if;
    end process shift_dffs;
 	
-	--Seriell zu Parallel
+	-- Seriell to Parallel
 	serial_parallel : process(all)
 	begin
-	  --Daten werden parallel abgespeichert
 	  if enable = '1' then
 	    next_shiftreg <= shiftreg(14 downto 0) & ser_in; 
-	  --Keine Daten werden herausgelesen
 	  else
 	    next_shiftreg <= shiftreg;
 	  end if;
 	end process serial_parallel;
 	
-	par_out <= shiftreg;  --Daten werden parallel herausgelesen
+	par_out <= shiftreg;  											-- read data parallel
   
 end rtl;
 

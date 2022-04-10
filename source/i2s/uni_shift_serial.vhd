@@ -18,11 +18,11 @@ library ieee;
 
 entity uni_shift_serial is
         port(
-            clk    : in std_logic;
-		      rst_n1 : in std_logic;
-				load   : in std_logic;
-				enable : in std_logic;
-				par_in : in std_logic_vector(15 downto 0);
+            clk    : in  std_logic;
+		      reset_n: in  std_logic;
+				load   : in  std_logic;
+				enable : in  std_logic;
+				par_in : in  std_logic_vector(15 downto 0);
 				ser_out: out std_logic
         );
 end entity;
@@ -40,7 +40,7 @@ architecture rtl of uni_shift_serial is
 	
 begin
   
-   --Reset Funktion und Clock-Signal überprüft
+   -- Reset and Clock-Signal 
    shift_dffs : process(all)
    begin
      if reset_n = '0' then
@@ -50,18 +50,13 @@ begin
      end if;
    end process shift_dffs;
 	
-	--Parallen zu Serielle
+	-- Parallen to Serielle
 	parallel_serial : process(all)
 	begin
-	  --Parallel Daten werden aufgenommen
-	  if load = '1' then
+	  if load = '1' then												-- load data
 	    next_shiftreg <= par_in;
-		 
-	  --Daten werden zu LSB geschieben
 	  elsif enable = '1' then
 	     next_shiftreg <= shiftreg(14 downto 0) & '0';
-		  
-	  --Keine Daten werden herausgelesen
 	  else
 	    next_shiftreg <= shiftreg;
 	  end if;
