@@ -59,16 +59,19 @@ architecture comb of path_control is
 -------------------------------------------------------------------------------
 begin
 
-	if (S <= "0") then
+process (sw_sync_3, dacdat_pl_o, dacdat_pr_o)
+
+begin
+
+	IF (sw_sync_3 <= "0") THEN
 		dds_l_i <= dacdat_pl_o;
 		dds_r_i <= dacdat_pr_o;
-	elsif (S <= "1") then
+	ELSIF (sw_sync_3 <= "1") THEN
 		adcdat_pl_i <= dacdat_pl_o;
-		adcdat_pr_i <= dacdat_pr_o;
-	end if;
+		adcdat_pr_i <= dacdat_pr_O;
+	END IF;
 
-
-
+end process;
 
 end comb;
 
