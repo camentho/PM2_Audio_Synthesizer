@@ -45,14 +45,14 @@ architecture top of i2s_master is
 -------------------------------------------------------------------------------
 -- Signal Declaration
 -------------------------------------------------------------------------------
-	signal load		     : std_logic;
+	signal load_sig     : std_logic;
 	signal shift_l		  : std_logic;
 	signal shift_r		  : std_logic;
 	signal ser_out_left : std_logic;
 	signal ser_out_right: std_logic;
 
 -------------------------------------------------------------------------------
--- Component Declaration
+-- Component Declarations
 -------------------------------------------------------------------------------
 	component uni_shiftreg_parallel
 		port(
