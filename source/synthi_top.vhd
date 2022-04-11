@@ -153,7 +153,7 @@ architecture struct of synthi_top is
       -- Verbindungen zum Audio-Codec
 		ADCDAT_s_i   : in  std_logic;       					-- Serielle Daten Eingang
       DACDAT_s_o   : out std_logic;      						-- Serielle Daten Ausgang
-      WS_o         : out std_logic;
+      WS_o         : out std_logic
 		);
 	 end component i2s_master;
 	 
@@ -222,7 +222,7 @@ begin
 		reset_n		 => reset_n,
 		clk_6m		 => clk_6M,
 		ws_o			 => AUD_DACLRCK,
-		ws_o			 => AUD_ADCLRCK,
+		ws_o			 => AUD_ADCLRCK
 		);
 	
   inst4 : codec_controller
@@ -240,9 +240,9 @@ begin
     port map (
 	   dacdat_pl_o  => dacdat_pl,
 		dacdat_pr_o  => dacdat_pr,
-		adcdat_pl_i  => adcdat_pl.
+		adcdat_pl_i  => adcdat_pl,
 		adcdat_pr_i  => adcdat_pr,
-		sw_sync_3	 => sw,
+		sw_sync_3	 => sw
 		);
 		
 end architecture struct;
