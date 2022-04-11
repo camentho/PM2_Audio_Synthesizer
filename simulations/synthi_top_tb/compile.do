@@ -21,6 +21,11 @@ vcom -2008 -explicit -work work ../../../source/infrastructure/Infrastructure.vh
 
 vcom -2008 -explicit -work work ../../../source/i2c/i2c_master.vhd
 
+vcom -2008 -explicit -work work ../../../source/i2s/uni_shift_parallel.vhd
+vcom -2008 -explicit -work work ../../../source/i2s/uni_shift_serial.vhd
+vcom -2008 -explicit -work work ../../../source/i2s/i2s_frame_generator.vhd
+vcom -2008 -explicit -work work ../../../source/i2s/i2s_master.vhd
+
 vcom -2008 -explicit -work work ../../../source/count_down.vhd
 vcom -2008 -explicit -work work ../../../source/signal_checker.vhd
 vcom -2008 -explicit -work work ../../../source/reg_table_pkg.vhd
@@ -29,6 +34,7 @@ vcom -2008 -explicit -work work ../../../source/user_driver_pkg.vhd
 vcom -2008 -explicit -work work ../../../source/simulation_pkg.vhd
 vcom -2008 -explicit -work work ../../../source/standard_driver_pkg.vhd
 vcom -2008 -explicit -work work ../../../source/i2c_slave_bfm.vhd
+vcom -2008 -explicit -work work ../../../source/path_control.vhd
 vcom -2008 -explicit -work work ../../../source/synthi_top.vhd
 vcom -2008 -explicit -work work ../../../source/synthi_top_tb.vhd
 

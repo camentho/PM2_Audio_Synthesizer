@@ -79,9 +79,14 @@ architecture struct of synthi_top is
   signal reset_n     : std_logic;       -- reset signal
   signal serial_data : std_logic;       -- serial data
   signal writes	   : std_logic;
-  signal write_data  : std_logic_vector(15 downto 0);
   signal write_done  : std_logic;
   signal ack_error   : std_logic;
+  signal write_data  : std_logic_vector(15 downto 0);
+  signal	dacdat_pl 	: std_logic_vector(15 downto 0);  -- path_controller
+  signal dacdat_pr 	: std_logic_vector(15 downto 0);
+  signal adcdat_pl 	: std_logic_vector(15 downto 0);  -- path_controller
+  signal adcdat_pr 	: std_logic_vector(15 downto 0);
+  
 
   -----------------------------------------------------------------------------
   -- Component declarations
@@ -134,6 +139,38 @@ architecture struct of synthi_top is
 		ack_error_o  : out std_logic
 		);
 	end component i2c_master;
+	
+	component i2s_master is 
+	  port (
+	   clk_6m   	 : in  std_logic;            				-- 6M Clock
+      reset_n 	 	 : in  std_logic;  								-- Reset or init used for re-initialisation
+      step_o 		 : out std_logic;          				-- Pulse once per audio frame 1/48kHz
+      -- Verbindungen zum path_controller
+		DACDAT_pl_i  : in  std_logic_vector(15 downto 0);  -- Eingang vom path_controller
+      DACDAT_pr_i  : in  std_logic_vector(15 downto 0);
+      ADCDAT_pl_o  : out std_logic_vector(15 downto 0);  -- Ausgang zum path_controller
+      ADCDAT_pr_o  : out std_logic_vector(15 downto 0);
+      -- Verbindungen zum Audio-Codec
+		ADCDAT_s_i   : in  std_logic;       					-- Serielle Daten Eingang
+      DACDAT_s_o   : out std_logic;      						-- Serielle Daten Ausgang
+      WS_o         : out std_logic;
+		);
+	 end component i2s_master;
+	 
+	 component path_control is
+	  port (
+	   sw_sync_3   : in  std_logic_vector(2  downto 0);  	-- Wahl des Path
+      -- Audio data generated inside FPGA
+      dds_l_i 	 	: in  std_logic_vector(15 downto 0);  	-- Eingang vom Synthesizer
+      dds_r_i 	 	: in  std_logic_vector(15 downto 0);
+      -- Audio data coming from codec
+      adcdat_pl_i : in  std_logic_vector(15 downto 0);   -- Eingang vom i2s_master
+      adcdat_pr_i : in  std_logic_vector(15 downto 0);
+      -- Audio data towards codec
+      dacdat_pl_o : out std_logic_vector(15 downto 0);   -- Ausgang zum i2s_master
+      dacdat_pr_o : out std_logic_vector(15 downto 0)
+      );
+	  end component path_control;
 
 begin
 
@@ -155,11 +192,11 @@ begin
 
   inst1 : uart_top
     port map (
-      clk_6M    => clk_6M,
-      reset_n   => reset_n,
-      serial_in => serial_data,
-      hex0      => HEX0,
-      hex1      => HEX1
+      clk_6M    	 => clk_6M,
+      reset_n   	 => reset_n,
+      serial_in 	 => serial_data,
+      hex0      	 => HEX0,
+      hex1      	 => HEX1
 		);
 	
   inst2 : i2c_master
@@ -174,18 +211,40 @@ begin
 		sda_io		 => AUD_SDAT		
 		);
 	
-  inst3 : codec_controller
+  ins3 : i2s_master
     port map (
-	   mode			 => SW,
+	   adcdat_s_i	 => AUD_ADCDAT,
+		dacdat_s_o	 => AUD_DACDAT,
+		adcdat_pr	 => adcdat_pr,
+		adcdat_pl	 => adcdat_pl,
+		dacdat_pr	 => dacdat_pr,
+		dacdat_pr	 => dacdat_pl,
+		reset_n		 => reset_n,
+		clk_6m		 => clk_6M,
+		ws_o			 => AUD_DACLRCK,
+		ws_o			 => AUD_ADCLRCK,
+		);
+	
+  inst4 : codec_controller
+    port map (
+	   mode			 => sw,
 		clk			 => clk_6M,
 		reset_n		 => reset_n,
 		write_o		 => writes,
 		write_data_o => write_data,
 		write_done_i => write_done,
-		ack_error_i => ack_error
+		ack_error_i  => ack_error
 		);
-
-
+	
+  inst5 : path_control
+    port map (
+	   dacdat_pl_o  => dacdat_pl,
+		dacdat_pr_o  => dacdat_pr,
+		adcdat_pl_i  => adcdat_pl.
+		adcdat_pr_i  => adcdat_pr,
+		sw_sync_3	 => sw,
+		);
+		
 end architecture struct;
 
 -------------------------------------------------------------------------------

@@ -34,7 +34,7 @@ entity i2s_master is
        -- Verbindungen zum Audio-Codec
 		 ADCDAT_s_i  : in  std_logic;       					-- Serielle Daten Eingang
        DACDAT_s_o  : out std_logic;      						-- Serielle Daten Ausgang
-       WS_o        : out std_logic;      						-- WordSelect (Links/Rechts)
+       WS_o        : out std_logic      						-- WordSelect (Links/Rechts)
        );
 end i2s_master;
 
@@ -45,46 +45,46 @@ architecture top of i2s_master is
 -------------------------------------------------------------------------------
 -- Signal Declaration
 -------------------------------------------------------------------------------
-signal load		     : std_logic;
-signal shift_l		  : std_logic;
-signal shift_r		  : std_logic;
-signal ser_out_left : std_logic;
-signal ser_out_right: std_logic;
+	signal load		     : std_logic;
+	signal shift_l		  : std_logic;
+	signal shift_r		  : std_logic;
+	signal ser_out_left : std_logic;
+	signal ser_out_right: std_logic;
 
 -------------------------------------------------------------------------------
 -- Component Declaration
 -------------------------------------------------------------------------------
-component uni_shiftreg_parallel
-	port(
-		enable	: in  std_logic;
-		reset_n	: in  std_logic;
-		clk		: in  std_logic;
-		ser_in	: in  std_logic;
-		par_out	: out std_logic
-	);
-	end component;
+	component uni_shiftreg_parallel
+		port(
+			enable	: in  std_logic;
+			reset_n	: in  std_logic;
+			clk		: in  std_logic;
+			ser_in	: in  std_logic;
+			par_out	: out std_logic
+		);
+		end component uni_shiftreg_parallel;
 
-component uni_shiftreg_serial
-	port(
-		load		: in  std_logic;
-		enable	: in  std_logic;
-		reset_n	: in  std_logic;
-		clk		: in  std_logic;
-		par_in	: in  std_logic;
-		ser_out	: out std_logic
-	);
-	end component;
+	component uni_shiftreg_serial
+		port(
+			load		: in  std_logic;
+			enable	: in  std_logic;
+			reset_n	: in  std_logic;
+			clk		: in  std_logic;
+			par_in	: in  std_logic;
+			ser_out	: out std_logic
+		);
+		end component uni_shiftreg_serial;
 
-component i2s_frame_generator
-	port(
-		reset_n	: in  std_logic;
-		clk_6m	: in  std_logic;
-		load		: out std_logic;
-		shift_l	: out std_logic;
-		shift_r	: out std_logic;
-		ws_o		: out std_logic
-	);
-	end component;
+	component i2s_frame_generator
+		port(
+			reset_n	: in  std_logic;
+			clk_6m	: in  std_logic;
+			load		: out std_logic;
+			shift_l	: out std_logic;
+			shift_r	: out std_logic;
+			ws_o		: out std_logic
+		);
+		end component i2s_frame_generator;
 
 begin
 

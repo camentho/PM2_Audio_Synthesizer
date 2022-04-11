@@ -40,7 +40,7 @@ architecture rtl of i2s_frame_generator is
 	
 begin
   
-  --Reset Funktion und Clock-Signal überprüft
+  -- reset and clock 
   shift_dffs : process(all)
   begin
     if reset_n = '0' then
@@ -49,49 +49,40 @@ begin
       bit_counter <= next_bit_counter;
     end if;
   end process shift_dffs;
-  
-  --Bit_counter wird überprüft, load gesetzt 
+
+  -- bit_counter
   counter : process(all)
   begin
-     --Default Statement
      load <= '0';
-	   
 	   if (bit_counter = x"00") then
 	     load <= '1';
 	   end if;
-
-     --bit_counter wird zurückgesetzt
+     --bit_counter reset
      if bit_counter = x"7F" then
 	    next_bit_counter <= x"00";
-
-	  --bit_counter zählt auf
 	  else
 	    next_bit_counter <= bit_counter + 1;
 	  end if;
   end process counter;
-  
-  --shift_l, shift_r und ws werden gesetzt
+
   right_left : process(all)
   begin
-     --Default Statements
+     -- default statements
      shift_l <= '0';
      shift_r <= '0';
      ws  <= '0';
-	  
-     --Linke Signal
+     -- left signal
 	  if (bit_counter >= x"01") and (bit_counter <= x"10")  then
 		 shift_l <= '1';
-			
-	  --Rechte Signal
+	  -- right signal
 	  elsif (bit_counter >= x"41") and (bit_counter <= x"50")  then
 		 shift_r <= '1';
 	  end if;
-	  
-	  --WS rechte Signal
+	  -- ws right signal
 	  if (bit_counter >= x"40") then
 	    ws <= '1';
 	  end if;
+	  
 	end process right_left;
-
 
 end rtl;

@@ -23,15 +23,15 @@ use ieee.std_logic_1164.all;
 
 entity path_control is
   port(
-		 sw_sync_3   : in  std_logic;  							--Wahl des Path
+		 sw_sync_3   : in  std_logic_vector(2  downto 0);  -- Wahl des Path
        -- Audio data generated inside FPGA
-       dds_l_i 	 : in  std_logic_vector(15 downto 0);  --Eingang vom Synthesizer
+       dds_l_i 	 : in  std_logic_vector(15 downto 0);  -- Eingang vom Synthesizer
        dds_r_i 	 : in  std_logic_vector(15 downto 0);
        -- Audio data coming from codec
-       adcdat_pl_i : in  std_logic_vector(15 downto 0);  --Eingang vom i2s_master
+       adcdat_pl_i : in  std_logic_vector(15 downto 0);  -- Eingang vom i2s_master
        adcdat_pr_i : in  std_logic_vector(15 downto 0);
        -- Audio data towards codec
-       dacdat_pl_o : out std_logic_vector(15 downto 0);  --Ausgang zum i2s_master
+       dacdat_pl_o : out std_logic_vector(15 downto 0);  -- Ausgang zum i2s_master
        dacdat_pr_o : out std_logic_vector(15 downto 0)
        );
 end path_control;
@@ -59,19 +59,16 @@ architecture comb of path_control is
 -------------------------------------------------------------------------------
 begin
 
-process (sw_sync_3, dacdat_pl_o, dacdat_pr_o)
-
-begin
-
-	IF (sw_sync_3 <= "0") THEN
+	if sw_sync_3 <= '0' then
 		dds_l_i <= dacdat_pl_o;
 		dds_r_i <= dacdat_pr_o;
-	ELSIF (sw_sync_3 <= "1") THEN
+	else
 		adcdat_pl_i <= dacdat_pl_o;
-		adcdat_pr_i <= dacdat_pr_O;
-	END IF;
+		adcdat_pr_i <= dacdat_pr_o;
+	end if;
 
-end process;
+
+
 
 end comb;
 
