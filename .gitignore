@@ -1,5 +1,6 @@
-# QUARTUS
-
+################################################################################
+# Quartus
+################################################################################
 # Working with Altera Quartus II (Q2) and do proper versioning is not that easy
 # but if you follow some rules it can be accomplished. :)
 # This file should be placed into the main directory where the .qpf file is
@@ -71,14 +72,9 @@ _output_files/
 PLLJ_PLLSPE_INFO.txt
 
 
-
-
-
-
-
-
+################################################################################
 # MODELSIM
-
+################################################################################
 # ignore ModelSim generated files and directories (temp files and so on)
 [_@]*
 
@@ -102,3 +98,10 @@ cov*/
 transcript*
 sc_dpiheader.h
 vsim.dbg
+
+
+################################################################################
+# System
+################################################################################
+# OSX
+*.DS_Store
