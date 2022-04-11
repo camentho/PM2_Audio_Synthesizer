@@ -57,6 +57,7 @@ architecture comb of path_control is
 -------------------------------------------------------------------------------
 -- Begin Architecture
 -------------------------------------------------------------------------------
+process (sw_sync_3, dacdat_pl_o, dacdat_pr_o)
 begin
 
 	if sw_sync_3 <= '0' then
