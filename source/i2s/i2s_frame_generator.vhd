@@ -23,7 +23,7 @@ entity i2s_frame_generator is
 				load   	: out std_logic;
 				shift_l	: out std_logic;
 				shift_r	: out std_logic;
-				ws     	: out std_logic
+				ws_o    	: out std_logic
         );
 end entity;
 
@@ -70,7 +70,7 @@ begin
      -- default statements
      shift_l <= '0';
      shift_r <= '0';
-     ws  <= '0';
+     ws_o	 <= '0';
      -- left signal
 	  if (bit_counter >= x"01") and (bit_counter <= x"10")  then
 		 shift_l <= '1';
@@ -78,9 +78,9 @@ begin
 	  elsif (bit_counter >= x"41") and (bit_counter <= x"50")  then
 		 shift_r <= '1';
 	  end if;
-	  -- ws right signal
+	  -- ws_o right signal
 	  if (bit_counter >= x"40") then
-	    ws <= '1';
+	    ws_o <= '1';
 	  end if;
 	  
 	end process right_left;

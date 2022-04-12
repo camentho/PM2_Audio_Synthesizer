@@ -31,6 +31,7 @@ entity synthi_top is
     CLOCK_50 	 : in std_logic;            			  -- DE2 clock from xtal 50MHz
     KEY_0    	 : in std_logic;            			  -- DE2 low_active input buttons
     KEY_1   	 : in std_logic;           			  -- DE2 low_active input buttons
+	 SW3			 : in std_logic;							  -- Switch for loop back mode and DDS mode
     SW      	 : in std_logic_vector(2 downto 0);   -- DE2 input switches
 
     USB_RXD 	 : in std_logic;           			  -- USB (midi) serial_input
@@ -49,6 +50,9 @@ entity synthi_top is
 
     AUD_SCLK 	 : out std_logic;           			  -- clock from I2C master block
     AUD_SDAT 	 : inout std_logic;         			  -- data         from I2C master block
+	 
+	 dds_l_i 	 : in  std_logic_vector(15 downto 0); -- Eingang vom Synthesizer
+    dds_r_i 	 : in  std_logic_vector(15 downto 0);
 
     HEX0   		 : out std_logic_vector(6 downto 0);  -- output for HEX 0 display
     HEX1  		 : out std_logic_vector(6 downto 0);  -- output for HEX 0 display
@@ -81,6 +85,7 @@ architecture struct of synthi_top is
   signal writes	   : std_logic;
   signal write_done  : std_logic;
   signal ack_error   : std_logic;
+  signal ws				: std_logic;
   signal write_data  : std_logic_vector(15 downto 0);
   signal	dacdat_pl 	: std_logic_vector(15 downto 0);  -- path_controller
   signal dacdat_pr 	: std_logic_vector(15 downto 0);
@@ -159,7 +164,7 @@ architecture struct of synthi_top is
 	 
 	 component path_control is
 	  port (
-	   sw_sync_3   : in  std_logic_vector(2  downto 0);  	-- Wahl des Path
+	   sw_sync_3   : in  std_logic;							  	-- Wahl des Path
       -- Audio data generated inside FPGA
       dds_l_i 	 	: in  std_logic_vector(15 downto 0);  	-- Eingang vom Synthesizer
       dds_r_i 	 	: in  std_logic_vector(15 downto 0);
@@ -221,13 +226,12 @@ begin
 		DACDAT_pl_i	 => dacdat_pl,
 		reset_n		 => reset_n,
 		clk_6m		 => clk_6M,
-		WS_o			 => AUD_DACLRCK,
-		WS_o			 => AUD_ADCLRCK
+		WS_o			 => ws
 		);
 	
   inst4 : codec_controller
     port map (
-	   mode			 => sw,
+	   mode			 => SW,
 		clk			 => clk_6M,
 		reset_n		 => reset_n,
 		write_o		 => writes,
@@ -238,12 +242,18 @@ begin
 	
   inst5 : path_control
     port map (
+		dds_l_i		 => dds_l_i,				
+		dds_r_i		 => dds_r_i,
 	   dacdat_pl_o  => dacdat_pl,
 		dacdat_pr_o  => dacdat_pr,
 		adcdat_pl_i  => adcdat_pl,
 		adcdat_pr_i  => adcdat_pr,
-		sw_sync_3	 => sw
+		sw_sync_3	 => SW3
 		);
+		
+
+	ws			 <= AUD_DACLRCK;
+	ws			 <= AUD_ADCLRCK;
 		
 end architecture struct;
 

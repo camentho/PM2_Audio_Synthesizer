@@ -91,9 +91,9 @@ begin
 -- Multiplexer for left and right serial channel
 	step_o <= load_sig;
 		 
-	serial_right_left : process(ws_o, dacdat_s_o, ser_out_left, ser_out_right)
+	serial_right_left : process(WS_o, dacdat_s_o, ser_out_left, ser_out_right)
 	begin
-		if ws_o = '0' then					-- left serial channel
+		if WS_o = '0' then					-- left serial channel
 			dacdat_s_o <= ser_out_left;
 		else										-- right serial channel
 			dacdat_s_o <= ser_out_right;
@@ -146,7 +146,7 @@ begin
 		load		=> load_sig,
 		shift_l	=> shift_l,
 		shift_r	=> shift_r,
-		ws_o		=> ws_o
+		ws_o			=> WS_o
 		);
 
 
