@@ -142,7 +142,7 @@ begin
 	inst4 : i2s_frame_generator
 	port map(
 	   reset_n	=> reset_n,
-		clk		=> clk_6m,
+		clk_6m	=> clk_6m,
 		load		=> load_sig,
 		shift_l	=> shift_l,
 		shift_r	=> shift_r,

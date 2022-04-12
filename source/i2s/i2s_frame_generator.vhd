@@ -18,7 +18,7 @@ library ieee;
 
 entity i2s_frame_generator is
         port(
-            clk    	: in  std_logic;
+            clk_6m  	: in  std_logic;
 		      reset_n	: in  std_logic;
 				load   	: out std_logic;
 				shift_l	: out std_logic;
@@ -45,7 +45,7 @@ begin
   begin
     if reset_n = '0' then
       bit_counter <= x"00";
-    elsif rising_edge(clk) then
+    elsif rising_edge(clk_6m) then
       bit_counter <= next_bit_counter;
     end if;
   end process shift_dffs;
