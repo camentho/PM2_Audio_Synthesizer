@@ -60,7 +60,7 @@ architecture top of i2s_master is
 			reset_n	: in  std_logic;
 			clk		: in  std_logic;
 			ser_in	: in  std_logic;
-			par_out	: out std_logic
+			par_out	: out std_logic_vector(15 downto 0)
 		);
 		end component uni_shift_parallel;
 
@@ -70,7 +70,7 @@ architecture top of i2s_master is
 			enable	: in  std_logic;
 			reset_n	: in  std_logic;
 			clk		: in  std_logic;
-			par_in	: in  std_logic;
+			par_in	: in  std_logic_vector(15 downto 0);
 			ser_out	: out std_logic
 		);
 		end component uni_shift_serial;
