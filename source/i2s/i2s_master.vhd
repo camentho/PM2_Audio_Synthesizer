@@ -54,7 +54,7 @@ architecture top of i2s_master is
 -------------------------------------------------------------------------------
 -- Component Declarations
 -------------------------------------------------------------------------------
-	component uni_shiftreg_parallel
+	component uni_shift_parallel
 		port(
 			enable	: in  std_logic;
 			reset_n	: in  std_logic;
@@ -62,9 +62,9 @@ architecture top of i2s_master is
 			ser_in	: in  std_logic;
 			par_out	: out std_logic
 		);
-		end component uni_shiftreg_parallel;
+		end component uni_shift_parallel;
 
-	component uni_shiftreg_serial
+	component uni_shift_serial
 		port(
 			load		: in  std_logic;
 			enable	: in  std_logic;
@@ -73,7 +73,7 @@ architecture top of i2s_master is
 			par_in	: in  std_logic;
 			ser_out	: out std_logic
 		);
-		end component uni_shiftreg_serial;
+		end component uni_shift_serial;
 
 	component i2s_frame_generator
 		port(
@@ -104,7 +104,7 @@ begin
 	inst0 : uni_shift_serial
 	port map(
 		load		=> load_sig,
-		enable	=> shift_l_sig,
+		enable	=> shift_l,
 		reset_n	=> reset_n,
 		clk		=> clk_6m,
 		par_in	=> dacdat_pl_i,
@@ -114,7 +114,7 @@ begin
 	inst1 : uni_shift_serial
 	port map( 
 		load		=> load_sig,
-		enable	=> shift_r_sig,
+		enable	=> shift_r,
 		reset_n	=> reset_n,
 		clk		=> clk_6m,
 		par_in	=> dacdat_pr_i,
@@ -124,7 +124,7 @@ begin
 	inst2 : uni_shift_parallel
 	port map(
 		ser_in	=> adcdat_s_i,
-		enable	=> shift_l_sig,
+		enable	=> shift_l,
 		reset_n	=> reset_n,
 		clk		=> clk_6m,
 		par_out	=> adcdat_pl_o
@@ -133,7 +133,7 @@ begin
 	inst3 : uni_shift_parallel
 	port map(
 	   ser_in	=> adcdat_s_i,
-		enable	=> shift_r_sig,
+		enable	=> shift_r,
 		reset_n	=> reset_n,
 		clk		=> clk_6m,
 		par_out	=> adcdat_pr_o
@@ -144,8 +144,8 @@ begin
 	   reset_n	=> reset_n,
 		clk		=> clk_6m,
 		load		=> load_sig,
-		shift_l	=> shift_l_sig,
-		shift_r	=> shift_r_sig,
+		shift_l	=> shift_l,
+		shift_r	=> shift_r,
 		ws_o		=> ws_o
 		);
 
