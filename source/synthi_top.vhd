@@ -213,16 +213,16 @@ begin
 	
   ins3 : i2s_master
     port map (
-	   adcdat_s_i	 => AUD_ADCDAT,
-		dacdat_s_o	 => AUD_DACDAT,
-		adcdat_pr	 => adcdat_pr,
-		adcdat_pl	 => adcdat_pl,
-		dacdat_pr	 => dacdat_pr,
-		dacdat_pr	 => dacdat_pl,
+	   ADCDAT_s_i	 => AUD_ADCDAT,
+		DACDAT_s_o	 => AUD_DACDAT,
+		ADCDAT_pr_o	 => adcdat_pr,
+		ADCDAT_pl_o	 => adcdat_pl,
+		DACDAT_pr_i	 => dacdat_pr,
+		DACDAT_pl_i	 => dacdat_pl,
 		reset_n		 => reset_n,
 		clk_6m		 => clk_6M,
-		ws_o			 => AUD_DACLRCK,
-		ws_o			 => AUD_ADCLRCK
+		WS_o			 => AUD_DACLRCK,
+		WS_o			 => AUD_ADCLRCK
 		);
 	
   inst4 : codec_controller
