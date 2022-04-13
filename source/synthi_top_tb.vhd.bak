@@ -16,7 +16,8 @@
 -------------------------------------------------------------------------------
 -- Revisions  :
 -- Date        Version  Author  Description
--- 2022-03-23  1.0      rafae	Created
+-- 2022-03-23  1.0      rafae		Created
+-- 2022-04-13  1.1		rafae		MS2
 -------------------------------------------------------------------------------
 
 library ieee;
@@ -32,7 +33,6 @@ use work.user_driver_pkg.all;
 -------------------------------------------------------------------------------
 
 entity synthi_top_tb is
-
 end entity synthi_top_tb;
 
 -------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ architecture struct of synthi_top_tb is
       CLOCK_50    : in    std_logic;
       KEY_0       : in    std_logic;
       KEY_1       : in    std_logic;
-      SW          : in    std_logic_vector(2 downto 0);
+      SW          : in    std_logic_vector(9 downto 0);
       USB_RXD     : in    std_logic;
       USB_TXD     : in    std_logic;
       BT_RXD      : in    std_logic;
@@ -72,11 +72,11 @@ architecture struct of synthi_top_tb is
       LEDR_9      : out   std_logic);
   end component synthi_top;
 
-  component I2C_slave_bfm is
+  component i2C_slave_bfm is
   port(
-  I2C_SCLK			: in		std_logic;
   AUD_XCK     		: in	   std_logic;
-  I2C_SDAT			: inout	std_logic;
+  I2C_SCLK			: inout  std_logic := 'H';
+  I2C_SDAT			: inout  std_logic := 'H';
   reg_data0       : out		std_logic_vector(31 downto 0); 
   reg_data1       : out 	std_logic_vector(31 downto 0); 
   reg_data2       : out 	std_logic_vector(31 downto 0); 
@@ -87,13 +87,13 @@ architecture struct of synthi_top_tb is
   reg_data7       : out		std_logic_vector(31 downto 0); 
   reg_data8       : out 	std_logic_vector(31 downto 0); 
   reg_data9       : out 	std_logic_vector(31 downto 0));
-  end component I2C_slave_bfm;
+  end component i2C_slave_bfm;
   
   -- component ports
+  
   signal CLOCK_50    : std_logic;
   signal KEY_0       : std_logic;
   signal KEY_1       : std_logic;
-  signal SW          : std_logic_vector(2 downto 0);
   signal USB_RXD     : std_logic;
   signal USB_TXD     : std_logic;
   signal BT_RXD      : std_logic;
@@ -119,6 +119,10 @@ architecture struct of synthi_top_tb is
   signal LEDR_7      : std_logic;
   signal LEDR_8      : std_logic;
   signal LEDR_9      : std_logic;
+  
+  constant clock_freq   : natural := 50_000_000;
+  constant clock_period : time    := 1000 ms/clock_freq;
+  
   signal reg_data0 	: std_logic_vector(31 downto 0); 
   signal reg_data1  	: std_logic_vector(31 downto 0); 
   signal reg_data2   : std_logic_vector(31 downto 0); 
@@ -129,21 +133,25 @@ architecture struct of synthi_top_tb is
   signal reg_data7  	: std_logic_vector(31 downto 0); 
   signal reg_data8   : std_logic_vector(31 downto 0); 
   signal reg_data9  	: std_logic_vector(31 downto 0);
-  signal gpi_signals : std_logic_vector(31 downto 0);	
+  signal gpi_signals : std_logic_vector(31 downto 0);
+  signal switch 		: std_logic_vector(31 downto 0);
+  signal dacdat_check: std_logic_vector(31 downto 0);
+
 	
-  constant clock_freq   : natural := 50_000_000;
-  constant clock_period : time    := 1000 ms/clock_freq;
 
 begin  -- architecture struct
-
-	SW(2 downto 0) <= gpi_signals(2 downto 0);
+  
+  SW(3)		<= gpi_signals(3);
+  SW(2 downto 0) <= gpi_signals(2 downto 0);
+  
   -- component instantiation
+  
   DUT: synthi_top
     port map (
       CLOCK_50    => CLOCK_50,
       KEY_0       => KEY_0,
       KEY_1       => KEY_1,
-      SW          => SW,
+      SW          => SW(9 downto 0),
       USB_RXD     => USB_RXD,
       USB_TXD     => USB_TXD,
       BT_RXD      => BT_RXD,
@@ -168,41 +176,46 @@ begin  -- architecture struct
       LEDR_6      => LEDR_6,
       LEDR_7      => LEDR_7,
       LEDR_8      => LEDR_8,
-      LEDR_9      => LEDR_9);
+      LEDR_9      => LEDR_9
+		);
 
-  DUT1: I2C_slave_bfm
-   port map (
-   I2C_SCLK	   => AUD_SCLK,
-   I2C_SDAT	   => AUD_SDAT,
-   AUD_XCK	   => AUD_XCK,
-   reg_data0   => reg_data0, 
-   reg_data1   => reg_data1,     
-   reg_data2   => reg_data2,    
-   reg_data3   => reg_data3,    
-   reg_data4   => reg_data4,    
-   reg_data5   => reg_data5,
-   reg_data6   => reg_data6,
-   reg_data7   => reg_data7,
-   reg_data8   => reg_data8, 
-   reg_data9   => reg_data9);
+  tb_inst0: i2C_slave_bfm
+	generic map (
+		verbose => false)
+    port map (
+      I2C_SCLK	   => AUD_SCLK,
+      I2C_SDAT	   => AUD_SDAT,
+      AUD_XCK	   => AUD_XCK,
+      reg_data0   => reg_data0, 
+      reg_data1   => reg_data1,     
+      reg_data2   => reg_data2,    
+      reg_data3   => reg_data3,    
+      reg_data4   => reg_data4,    
+      reg_data5   => reg_data5,
+      reg_data6   => reg_data6,
+      reg_data7   => reg_data7,
+      reg_data8   => reg_data8, 
+      reg_data9   => reg_data9
+	   );
 
   readcmd : process
+  
     -- This process loops through a file and reads one line
     -- at a time, parsing the line to get the values and
     -- expected result.
 
-    variable cmd          : line;  --stores test command
-    variable line_in      : line; --stores the to be processed line     
-    variable tv           : test_vect; --stores arguments 1 to 4
-    variable lincnt       : integer := 0;  --counts line number in testcase file
-    variable fail_counter : integer := 0;--counts failed tests
-
-
+    variable cmd          : line;  				--stores test command
+    variable line_in      : line; 				--stores the to be processed line     
+    variable tv           : test_vect; 		--stores arguments 1 to 4
+    variable lincnt       : integer := 0;  	--counts line number in testcase file
+    variable fail_counter : integer := 0;		--counts failed tests
 
   begin
+  
     -------------------------------------
     -- Open the Input and output files
     -------------------------------------
+	 
     FILE_OPEN(cmdfile, "../testcase.dat", read_mode);
     FILE_OPEN(outfile, "../results.dat", write_mode);
 
@@ -210,13 +223,11 @@ begin  -- architecture struct
     -- Start the loop
     -------------------------------------
 
-
-    loop
+   loop
 
       --------------------------------------------------------------------------
       -- Check for end of test file and print out results at the end
       --------------------------------------------------------------------------
-
 
       if endfile(cmdfile) then          -- Check EOF
         end_simulation(fail_counter);
@@ -230,7 +241,6 @@ begin  -- architecture struct
       readline(cmdfile, line_in);       -- Read a line from the file
       lincnt := lincnt + 1;
 
-
       next when line_in'length = 0;     -- Skip empty lines
       next when line_in.all(1) = '#';   -- Skip lines starting with #
 
@@ -243,37 +253,40 @@ begin  -- architecture struct
 
       if cmd.all = "reset_target" then
         rst_sim(tv, key_0);
-		elsif cmd.all = string'("set_switches") then
-              gpi_sim(tv, gpi_signals);  
-      elsif cmd.all = "run_simulation_for" then
+		elsif cmd.all = "run_simulation_for" then
         run_sim(tv);
 		elsif cmd.all = "uart_send_data" then
         uar_sim(tv, usb_txd);
-	elsif cmd.all = string'("check_i2c_reg_0") then
+		elsif cmd.all = "check_display_hex0" then
+            hex_chk(tv, hex0);
+      elsif cmd.all = "check_display_hex0" then
+            hex_chk(tv, hex0);
+      elsif cmd.all = "check_display_hex1" then
+            hex_chk(tv, hex1);
+		elsif cmd.all = "set_switches" then
+              gpi_sim(tv, gpi_signals);
+		elsif cmd.all = string'("check_i2c_reg_0") then
               gpo_chk(tv, reg_data0);
-	elsif cmd.all = string'("check_i2c_reg_1") then
+		elsif cmd.all = string'("check_i2c_reg_1") then
               gpo_chk(tv, reg_data1);
-	elsif cmd.all = string'("check_i2c_reg_2") then
+		elsif cmd.all = string'("check_i2c_reg_2") then
               gpo_chk(tv, reg_data2);
-	elsif cmd.all = string'("check_i2c_reg_3") then
+		elsif cmd.all = string'("check_i2c_reg_3") then
               gpo_chk(tv, reg_data3);
-	elsif cmd.all = string'("check_i2c_reg_4") then
+		elsif cmd.all = string'("check_i2c_reg_4") then
               gpo_chk(tv, reg_data4);
-	elsif cmd.all = string'("check_i2c_reg_5") then
+		elsif cmd.all = string'("check_i2c_reg_5") then
               gpo_chk(tv, reg_data5);
-	elsif cmd.all = string'("check_i2c_reg_6") then
+		elsif cmd.all = string'("check_i2c_reg_6") then
               gpo_chk(tv, reg_data6);
-	elsif cmd.all = string'("check_i2c_reg_7") then
+		elsif cmd.all = string'("check_i2c_reg_7") then
               gpo_chk(tv, reg_data7);
-	elsif cmd.all = string'("check_i2c_reg_8") then
+		elsif cmd.all = string'("check_i2c_reg_8") then
               gpo_chk(tv, reg_data8);
-	elsif cmd.all = string'("check_i2c_reg_9") then
+		elsif cmd.all = string'("check_i2c_reg_9") then
               gpo_chk(tv, reg_data9);
-
-			
-				  
+  
         -- add further test commands below here
-
 
       else
         assert false
@@ -281,14 +294,13 @@ begin  -- architecture struct
           severity error;
       end if;
 
-      if tv.fail_flag = true then --count failures in tests
+      if tv.fail_flag = true then 			--count failures in tests
         fail_counter := fail_counter + 1;
       else fail_counter := fail_counter;
       end if;
 
-    end loop; --finished processing command line
-
-    wait; -- to avoid infinite loop simulator warning
+   end loop; 										--finished processing command line
+   wait; 											-- to avoid infinite loop simulator warning
 
   end process;
 
@@ -298,10 +310,7 @@ begin  -- architecture struct
     wait for clock_period/2;
     clock_50 <= '1';
     wait for clock_period/2;
-
   end process clkgen;
-
-  
 
 end architecture struct;
 

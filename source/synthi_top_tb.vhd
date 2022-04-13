@@ -16,7 +16,8 @@
 -------------------------------------------------------------------------------
 -- Revisions  :
 -- Date        Version  Author  Description
--- 2022-03-23  1.0      rafae	Created
+-- 2022-03-23  1.0      rafae		Created
+-- 2022-04-13  1.1		rafae		MS2
 -------------------------------------------------------------------------------
 
 library ieee;
@@ -43,7 +44,7 @@ architecture struct of synthi_top_tb is
       CLOCK_50    : in    std_logic;
       KEY_0       : in    std_logic;
       KEY_1       : in    std_logic;
-      SW          : in    std_logic_vector(2 downto 0);
+      SW          : in    std_logic_vector(9 downto 0);
       USB_RXD     : in    std_logic;
       USB_TXD     : in    std_logic;
       BT_RXD      : in    std_logic;
@@ -93,7 +94,6 @@ architecture struct of synthi_top_tb is
   signal CLOCK_50    : std_logic;
   signal KEY_0       : std_logic;
   signal KEY_1       : std_logic;
-  signal SW          : std_logic_vector(2 downto 0);
   signal USB_RXD     : std_logic;
   signal USB_TXD     : std_logic;
   signal BT_RXD      : std_logic;
@@ -133,12 +133,15 @@ architecture struct of synthi_top_tb is
   signal reg_data7  	: std_logic_vector(31 downto 0); 
   signal reg_data8   : std_logic_vector(31 downto 0); 
   signal reg_data9  	: std_logic_vector(31 downto 0);
-  signal gpi_signals : std_logic_vector(31 downto 0);	
+  signal gpi_signals : std_logic_vector(31 downto 0);
+  signal switch 		: std_logic_vector(31 downto 0);
+  signal dacdat_check: std_logic_vector(31 downto 0);
+
 	
-  
 
 begin  -- architecture struct
-
+  
+  SW(3)		 <= gpi_signals(3);
   SW(2 downto 0) <= gpi_signals(2 downto 0);
   
   -- component instantiation
@@ -148,7 +151,7 @@ begin  -- architecture struct
       CLOCK_50    => CLOCK_50,
       KEY_0       => KEY_0,
       KEY_1       => KEY_1,
-      SW          => SW,
+      SW          => SW(9 downto 0),
       USB_RXD     => USB_RXD,
       USB_TXD     => USB_TXD,
       BT_RXD      => BT_RXD,

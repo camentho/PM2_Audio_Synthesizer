@@ -31,8 +31,7 @@ entity synthi_top is
     CLOCK_50 	 : in std_logic;            			  -- DE2 clock from xtal 50MHz
     KEY_0    	 : in std_logic;            			  -- DE2 low_active input buttons
     KEY_1   	 : in std_logic;           			  -- DE2 low_active input buttons
-	 SW3			 : in std_logic;							  -- Switch for loop back mode and DDS mode
-    SW      	 : in std_logic_vector(2 downto 0);   -- DE2 input switches
+    SW      	 : in std_logic_vector(9 downto 0);   -- DE2 input switches
 
     USB_RXD 	 : in std_logic;           			  -- USB (midi) serial_input
     USB_TXD		 : in std_logic;            			  -- USB (midi) serial_output
@@ -41,6 +40,8 @@ entity synthi_top is
     BT_TXD  	 : in std_logic;           			  -- Bluetooth serial_output
     BT_RST_N 	 : in std_logic;            			  -- Bluetooth reset_n
 
+
+	 
 	 AUD_ADCDAT  : in  std_logic;           			  -- audio serial data from Codec-ADC
     AUD_XCK     : out std_logic;          			  -- master clock for Audio Codec
     AUD_DACDAT  : out std_logic;              		  -- audio serial data to Codec-DAC
@@ -50,9 +51,6 @@ entity synthi_top is
 
     AUD_SCLK 	 : out std_logic;           			  -- clock from I2C master block
     AUD_SDAT 	 : inout std_logic;         			  -- data         from I2C master block
-	 
-	 dds_l_i 	 : in  std_logic_vector(15 downto 0); -- Eingang vom Synthesizer
-    dds_r_i 	 : in  std_logic_vector(15 downto 0);
 
     HEX0   		 : out std_logic_vector(6 downto 0);  -- output for HEX 0 display
     HEX1  		 : out std_logic_vector(6 downto 0);  -- output for HEX 0 display
@@ -91,6 +89,8 @@ architecture struct of synthi_top is
   signal dacdat_pr 	: std_logic_vector(15 downto 0);
   signal adcdat_pl 	: std_logic_vector(15 downto 0);  -- path_controller
   signal adcdat_pr 	: std_logic_vector(15 downto 0);
+  signal dds_l 	 	: std_logic_vector(15 downto 0); -- Eingang vom Synthesizer
+  signal dds_r 	 	: std_logic_vector(15 downto 0);
   
 
   -----------------------------------------------------------------------------
@@ -231,7 +231,7 @@ begin
 	
   inst4 : codec_controller
     port map (
-	   mode			 => SW,
+	   mode			 => SW(2 downto 0),
 		clk			 => clk_6M,
 		reset_n		 => reset_n,
 		write_o		 => writes,
@@ -242,13 +242,13 @@ begin
 	
   inst5 : path_control
     port map (
-		dds_l_i		 => dds_l_i,				
-		dds_r_i		 => dds_r_i,
+		dds_l_i		 => dds_l,				
+		dds_r_i		 => dds_r,
 	   dacdat_pl_o  => dacdat_pl,
 		dacdat_pr_o  => dacdat_pr,
 		adcdat_pl_i  => adcdat_pl,
 		adcdat_pr_i  => adcdat_pr,
-		sw_sync_3	 => SW3
+		sw_sync_3	 => SW(3)
 		);
 		
 
