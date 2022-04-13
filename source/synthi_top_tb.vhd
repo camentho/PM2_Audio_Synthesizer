@@ -94,6 +94,7 @@ architecture struct of synthi_top_tb is
   signal CLOCK_50    : std_logic;
   signal KEY_0       : std_logic;
   signal KEY_1       : std_logic;
+  signal SW          : std_logic_vector(9 downto 0);
   signal USB_RXD     : std_logic;
   signal USB_TXD     : std_logic;
   signal BT_RXD      : std_logic;
