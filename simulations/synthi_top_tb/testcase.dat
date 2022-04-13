@@ -21,7 +21,9 @@
 
 # Digital AD/DA
 reset_target 20
-set_switches 00 00 00 01
+set_switches 00 00 00 08
+send_i2s 11 22 33 44
+check_i2s 11 22 33 44
 run_simulation_for 00 01 f0 00
 check_i2c_reg_0 00 00 00 17
 check_i2c_reg_1 00 00 00 17
@@ -36,6 +38,6 @@ check_i2c_reg_9 00 00 00 01
 
 # Analog Bypass
 reset_target 20
-set_switches 00 00 00 01 
+set_switches 00 00 00 08 
 run_simulation_for 00 01 f0 00
 check_i2c_reg_0 00 00 00 17
