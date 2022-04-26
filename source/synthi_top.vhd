@@ -252,8 +252,10 @@ begin
 		);
 		
 
-	ws			 <= AUD_DACLRCK;
-	ws			 <= AUD_ADCLRCK;
+	AUD_DACLRCK			 <= ws;
+	AUD_ADCLRCK			 <= ws;
+	AUD_BCLK				<= clk_6M;
+	
 		
 end architecture struct;
 

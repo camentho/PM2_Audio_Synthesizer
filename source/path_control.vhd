@@ -66,7 +66,7 @@ begin
 	IF (sw_sync_3 = '0') THEN
 		dacdat_pl_o <= dds_l_i;
 		dacdat_pr_o <= dds_r_i;
-	ELSIF (sw_sync_3 = '0') THEN
+	ELSE
 		dacdat_pl_o <= adcdat_pl_i;
 		dacdat_pr_O <= adcdat_pr_i;
 	END IF;
