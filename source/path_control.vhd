@@ -59,7 +59,7 @@ architecture comb of path_control is
 -------------------------------------------------------------------------------
 begin
 
-digital_loop : process (sw_sync_3, dacdat_pl_o, dacdat_pr_o)
+digital_loop : process (ALL)
 
 begin
 

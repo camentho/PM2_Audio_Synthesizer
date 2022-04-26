@@ -24,9 +24,3 @@ reset_target 20
 set_switches 00 00 00 08
 send_i2s 11 22 33 44
 check_i2s 11 22 33 44
-
-# Analog Bypass
-reset_target 20
-set_switches 00 00 00 08 
-run_simulation_for 00 01 f0 00
-check_i2c_reg_0 00 00 00 17

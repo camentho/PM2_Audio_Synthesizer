@@ -289,9 +289,9 @@ begin  -- architecture struct
   
         -- add further test commands below here
 
-      elsif cmd.all = string'("send_i2s") then
-        i2s_chk(tv,AUD_DACLRCK,AUD_BCLK,AUD_DACDAT,dacdat_check);
       elsif cmd.all = string'("check_i2s") then
+        i2s_chk(tv,AUD_DACLRCK,AUD_BCLK,AUD_DACDAT,dacdat_check);
+      elsif cmd.all = string'("send_i2s") then
         i2s_sim(tv, AUD_ADCLRCK, AUD_BCLK, AUD_ADCDAT);
 
       else

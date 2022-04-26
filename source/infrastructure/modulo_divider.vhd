@@ -28,7 +28,7 @@ END modulo_divider;
 ARCHITECTURE rtl OF modulo_divider IS
 -- Signals & Constants Declaration?
 -------------------------------------------
-signal width : integer := 3;
+signal width : integer := 2;
 signal count, next_count: unsigned(3 downto 0) := (others => '0');	 
 
 
@@ -60,8 +60,8 @@ BEGIN
   -- CONCURRENT ASSIGNMENTS
   --------------------------------------------------
   -- take MSB and convert for output data-type
-  clk_div12 <= std_logic(count(width));
-  clk_div6  <= std_logic(count(width-1));
+  clk_div12 <= std_logic(count(width-1));
+  clk_div6  <= std_logic(count(width));
   
   
  -- End Architecture 
