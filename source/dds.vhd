@@ -28,6 +28,11 @@ entity dds is
   port(
 		 clk_6m      : in  std_logic;
 		 reset_n     : in  std_logic;
+		 phi_incr    : in  std_logic;
+		 step     	 : in  std_logic;
+		 tone_on     : in  std_logic;
+		 attenu      : in  std_logic_vector(3 downto 0);
+		 dds         : out std_logic_vector(N_AUDIO-1 downto 0)
        );
 end dds;
 
@@ -37,7 +42,7 @@ architecture comb of dds is
 -------------------------------------------------------------------------------
 -- Constant Declaration
 -------------------------------------------------------------------------------
-
+	
 
 -------------------------------------------------------------------------------
 -- Type Declaration
