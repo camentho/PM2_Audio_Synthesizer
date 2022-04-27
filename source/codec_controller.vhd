@@ -84,13 +84,12 @@ write_o <= '0';
 		when st_write =>
 			write_o <= '1';
 			next_fsm_state <= st_wait;
-		
 		when st_wait =>
 			if ack_error_i then
 				next_fsm_state <= st_end;
 			end if;
 			if write_done_i then
-				if count < 9 then
+				if count <= 9 then
 					next_count <= count + 1;
 					next_fsm_state <= st_write;
 				else 
