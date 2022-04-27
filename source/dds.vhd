@@ -28,7 +28,7 @@ entity dds is
   port(
 		 clk_6m      : in  std_logic;
 		 reset_n     : in  std_logic;
-		 phi_incr    : in  std_logic;
+		 phi_incr    : in  std_logic_vector(N_CUM-1 downto 0);
 		 step     	 : in  std_logic;
 		 tone_on     : in  std_logic;
 		 attenu      : in  std_logic_vector(3 downto 0);
