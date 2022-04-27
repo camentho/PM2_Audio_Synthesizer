@@ -254,7 +254,7 @@ begin
 
 	AUD_DACLRCK			 <= ws;
 	AUD_ADCLRCK			 <= ws;
-	AUD_BCLK				<= clk_6M;
+	AUD_BCLK				<= not clk_6M;
 	
 		
 end architecture struct;
