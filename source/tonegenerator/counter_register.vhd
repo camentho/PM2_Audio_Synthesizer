@@ -20,10 +20,41 @@ USE ieee.numeric_std.all;
 -------------------------------------------
 -- Entity Declaration 
 -------------------------------------------
-ENTITY bit_counter IS
-  PORT(clk,reset_n   : IN    std_logic;
-		start_bit		: IN    std_logic;
-		baud_tick		: IN    std_logic;
-    	bit_count   	: OUT   std_logic_vector(3 downto 0)
+ENTITY counter_register IS
+  PORT(
+		clk_6m			: IN	  std_logic;
+		reset_n   		: IN    std_logic;
+		tone_on			: IN    std_logic;
+		next_count		: IN    unsigned(N_CUM-1 downto 0);
+    	count 		  	: OUT   unsigned(N_CUM-1 downto 0)
     	);
-END bit_counter;
+END counter_register;
+
+-------------------------------------------
+-- Architecture Declaration
+-------------------------------------------
+ARCHITECTURE rtl OF bit_counter IS
+
+-------------------------------------------
+-- Begin Architecture
+-------------------------------------------
+BEGIN
+
+-------------------------------------------
+-- PROCESS FOR COMBINATORIAL LOGIC
+-------------------------------------------
+	counter_register : PROCESS(ALL)
+	BEGIN
+	
+		IF reset_n = '0' THEN
+			count <= (OTHERS => '0');
+		ELSIF rising_edge(clk_6m) THEN
+			count <= next_count;
+		END IF;
+		
+	END PROCESS counter_register;
+	
+END rtl;
+
+
+
