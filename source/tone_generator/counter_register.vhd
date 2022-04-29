@@ -35,7 +35,7 @@ END counter_register;
 -------------------------------------------
 -- Architecture Declaration
 -------------------------------------------
-ARCHITECTURE rtl OF bit_counter IS
+ARCHITECTURE rtl OF counter_register IS
 
 -------------------------------------------
 -- Begin Architecture
