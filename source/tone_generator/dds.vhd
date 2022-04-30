@@ -54,17 +54,22 @@ architecture comb of dds is
 -------------------------------------------------------------------------------
 -- Signal Declaration
 -------------------------------------------------------------------------------
-signal lut_addr : integer range 0 to (L-1);
-signal lut_val  : signed(N_AUDIO-1 downto 0);
+SIGNAL count, next_count:       unsigned(N_CUM-1 downto 0);
 
 -------------------------------------------------------------------------------
 -- Begin Architecture
 -------------------------------------------------------------------------------
 begin
 
-digital_loop : process (ALL)
+	phase_counter_logic:PROCESS(all)
 
-begin
+	VARIABLE lut_val : signed(N_AUDIO-1 downto 0);
+	VARIABLE lut_addr : integer range 0 to L-1;
+
+	begin
+		
+		lut_addr := to_integer(count(N_CUM-1 downto N_CUM - N_LUT));
+
 
 
 end process;
