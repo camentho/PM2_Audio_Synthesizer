@@ -67,11 +67,15 @@ begin
 	VARIABLE lut_addr : integer range 0 to L-1;
 
 	begin
+		-- phase counter logic
+		if (step) then
+			next_count <= count + unsigned(phi_incr);
+		else
+			next_count <= count;
+		end if;
 		
 		lut_addr := to_integer(count(N_CUM-1 downto N_CUM - N_LUT));
 
-
-
-end process;
+	end process;
 
 end comb;
