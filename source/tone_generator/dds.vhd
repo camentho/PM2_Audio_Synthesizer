@@ -65,7 +65,8 @@ begin
 
 	VARIABLE lut_val : signed(N_AUDIO-1 downto 0);
 	VARIABLE lut_addr : integer range 0 to L-1;
-
+	VARIABLE atte : integer range 0 to 2;
+	
 	begin
 		-- phase counter logic
 		if (step) then
@@ -75,6 +76,15 @@ begin
 		end if;
 		
 		lut_addr := to_integer(count(N_CUM-1 downto N_CUM - N_LUT));
+		atte := to_integer(unsigned(attenu));
+	
+		case atte is
+		when 0 => dds <= std_logic_vector(lut_val);
+		when 1 => dds <= std_logic_vector(shift_right(lut_val, 1));
+		when 2 => dds <= std_logic_vector(shift_right(lut_val, 2));
+			
+		when others => dds <= std_logic_vector(lut_val);
+		end case;
 
 	end process;
 
