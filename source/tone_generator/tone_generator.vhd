@@ -85,7 +85,7 @@ BEGIN
       phi_incr => LUT_midi2dds(to_integer(unsigned(note_l))),
       step     => step_i,
 		tone_on 	=> tone_on,
-      attenu	=> velocity_i(6 downto 4),
+      attenu	=> velocity_i(6 downto 3),
 		dds      => dds_o_array
 		);
 
