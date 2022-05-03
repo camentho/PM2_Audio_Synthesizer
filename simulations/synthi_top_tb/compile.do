@@ -26,6 +26,10 @@ vcom -2008 -explicit -work work ../../../source/i2s/uni_shift_serial.vhd
 vcom -2008 -explicit -work work ../../../source/i2s/i2s_frame_generator.vhd
 vcom -2008 -explicit -work work ../../../source/i2s/i2s_master.vhd
 
+vcom -2008 -explicit -work work ../../../source/tone_generator/dds.vhd
+vcom -2008 -explicit -work work ../../../source/tone_generator/tone_gen_pkg.vhd
+vcom -2008 -explicit -work work ../../../source/tone_generator/tone_generator.vhd
+
 vcom -2008 -explicit -work work ../../../source/count_down.vhd
 vcom -2008 -explicit -work work ../../../source/signal_checker.vhd
 vcom -2008 -explicit -work work ../../../source/reg_table_pkg.vhd

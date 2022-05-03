@@ -84,6 +84,7 @@ architecture struct of synthi_top is
   signal write_done  : std_logic;
   signal ack_error   : std_logic;
   signal ws				: std_logic;
+  signal step_s		: std_logic;
   signal write_data  : std_logic_vector(15 downto 0);
   signal	dacdat_pl 	: std_logic_vector(15 downto 0);  -- path_controller
   signal dacdat_pr 	: std_logic_vector(15 downto 0);
@@ -91,6 +92,7 @@ architecture struct of synthi_top is
   signal adcdat_pr 	: std_logic_vector(15 downto 0);
   signal dds_l 	 	: std_logic_vector(15 downto 0); -- Eingang vom Synthesizer
   signal dds_r 	 	: std_logic_vector(15 downto 0);
+
   
 
   -----------------------------------------------------------------------------
@@ -176,6 +178,19 @@ architecture struct of synthi_top is
       dacdat_pr_o : out std_logic_vector(15 downto 0)
       );
 	  end component path_control;
+	  
+	 COMPONENT tone_generator IS
+	  PORT(
+		clk_6m			: IN		std_logic;
+		reset_n			: IN		std_logic;
+		step_i			: IN		std_logic;
+		tone_on			: IN		std_logic; -- abhängig von der Anzahl DDS
+		note_l			: IN		std_logic_vector(6 downto 0);
+		velocity_i		: IN		std_logic_vector(6 downto 0);
+		dds_l_o			: OUT		std_logic_vector(15 downto 0);
+		dds_r_o			: OUT		std_logic_vector(15 downto 0)
+		);
+	  END tone_generator;
 
 begin
 
@@ -227,6 +242,7 @@ begin
 		ADCDAT_pl_o	 => adcdat_pl,
 		DACDAT_pr_i	 => dacdat_pr,
 		DACDAT_pl_i	 => dacdat_pl,
+		step_o		 => step_s,
 		reset_n		 => reset_n,
 		clk_6m		 => clk_6M,
 		WS_o			 => ws
@@ -253,11 +269,24 @@ begin
 		adcdat_pr_i  => adcdat_pr,
 		sw_sync_3	 => SW(3)
 		);
+  
+  inst6 : tone_generator
+	 port map (
+		clk_6m		 => clk_6M,			
+		reset_n		 => reset_n,		
+		step_i		 => step_s,			
+		tone_on		 => sw(4),			
+		note_l		 => note_signal,			
+		velocity_i	 => velocity_signal,	
+		dds_l_o 		 => dds_l,
+		dds_r_o 		 => dds_r
+		);
 		
-
+	note_signal 		 <= sw(9 downto 8) & "00000";
+	velocity_signal 	 <= sw(7 downto 5) & "0000";
 	AUD_DACLRCK			 <= ws;
 	AUD_ADCLRCK			 <= ws;
-	AUD_BCLK				<= not clk_6M;
+	AUD_BCLK				 <= not clk_6M;
 	
 		
 end architecture struct;
