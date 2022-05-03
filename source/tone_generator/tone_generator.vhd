@@ -16,13 +16,14 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
+use work.tone_gen_pkg.all;
 
 -------------------------------------------
 -- Entity Declaration 
 -------------------------------------------
 ENTITY tone_generator IS
   PORT(
-		clk_6m			: IN		std_logic;
+		clk				: IN		std_logic;
 		reset_n			: IN		std_logic;
 		step_i			: IN		std_logic;
 		tone_on			: IN		std_logic; -- abhängig von der Anzahl DDS
@@ -36,13 +37,13 @@ END tone_generator;
 -------------------------------------------
 -- Architecture Declaration
 -------------------------------------------
-ARCHITECTURE rtl OF bit_counter IS
+ARCHITECTURE rtl OF tone_generator IS
 
   -----------------------------------------------------------------------------
   -- Internal signal declarations
   -----------------------------------------------------------------------------
   
-  	signal clk_singal			: std_logic;                        	
+  	signal clk_signal			: std_logic;                        	
 	signal reset 				: std_logic;
   	signal dds_o_array	 	: std_logic_vector(15 downto 0);
 	
@@ -71,21 +72,21 @@ ARCHITECTURE rtl OF bit_counter IS
 -------------------------------------------
 BEGIN
 
-  clk_signal <= clk_6m;
+  clk_signal <= clk;
   reset 		 <= reset_n;
-  dds_l_o 	 <= dds_out;
-  dds_r_o 	 <= dds_out;
+  dds_l_o 	 <= dds_o_array;
+  dds_r_o 	 <= dds_o_array;
   
   dds_0: dds
     port map 
 	 (
       clk_6m   => clk_signal,
       reset_n  => reset,
-      phi_incr => LUT_midi2dds(to_integer(unsigned(note_i))),
+      phi_incr => LUT_midi2dds(to_integer(unsigned(note_l))),
       step     => step_i,
 		tone_on 	=> tone_on,
       attenu	=> velocity_i(6 downto 4),
-		dds      => dds_out
+		dds      => dds_o_array
 		);
 
 END rtl;

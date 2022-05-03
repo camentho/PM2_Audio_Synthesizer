@@ -77,21 +77,23 @@ architecture struct of synthi_top is
   -- Internal signal declarations
   -----------------------------------------------------------------------------
 
-  signal clk_6M      : std_logic;       -- internal clock
-  signal reset_n     : std_logic;       -- reset signal
-  signal serial_data : std_logic;       -- serial data
-  signal writes	   : std_logic;
-  signal write_done  : std_logic;
-  signal ack_error   : std_logic;
-  signal ws				: std_logic;
-  signal step_s		: std_logic;
-  signal write_data  : std_logic_vector(15 downto 0);
-  signal	dacdat_pl 	: std_logic_vector(15 downto 0);  -- path_controller
-  signal dacdat_pr 	: std_logic_vector(15 downto 0);
-  signal adcdat_pl 	: std_logic_vector(15 downto 0);  -- path_controller
-  signal adcdat_pr 	: std_logic_vector(15 downto 0);
-  signal dds_l 	 	: std_logic_vector(15 downto 0); -- Eingang vom Synthesizer
-  signal dds_r 	 	: std_logic_vector(15 downto 0);
+  signal clk_6M      	: std_logic;       -- internal clock
+  signal reset_n     	: std_logic;       -- reset signal
+  signal serial_data 	: std_logic;       -- serial data
+  signal writes	   	: std_logic;
+  signal write_done  	: std_logic;
+  signal ack_error   	: std_logic;
+  signal ws					: std_logic;
+  signal step_s			: std_logic;
+  signal note_signal		: std_logic_vector(6 downto 0);
+  signal velocity_signal: std_logic_vector(6 downto 0);
+  signal write_data  	: std_logic_vector(15 downto 0);
+  signal	dacdat_pl 		: std_logic_vector(15 downto 0);  -- path_controller
+  signal dacdat_pr 		: std_logic_vector(15 downto 0);
+  signal adcdat_pl 		: std_logic_vector(15 downto 0);  -- path_controller
+  signal adcdat_pr 		: std_logic_vector(15 downto 0);
+  signal dds_l 	 		: std_logic_vector(15 downto 0); -- Eingang vom Synthesizer
+  signal dds_r 	 		: std_logic_vector(15 downto 0);
 
   
 
@@ -181,7 +183,7 @@ architecture struct of synthi_top is
 	  
 	 COMPONENT tone_generator IS
 	  PORT(
-		clk_6m			: IN		std_logic;
+		clk				: IN		std_logic;
 		reset_n			: IN		std_logic;
 		step_i			: IN		std_logic;
 		tone_on			: IN		std_logic; -- abhängig von der Anzahl DDS
@@ -190,7 +192,7 @@ architecture struct of synthi_top is
 		dds_l_o			: OUT		std_logic_vector(15 downto 0);
 		dds_r_o			: OUT		std_logic_vector(15 downto 0)
 		);
-	  END tone_generator;
+	  END COMPONENT tone_generator;
 
 begin
 
@@ -272,7 +274,7 @@ begin
   
   inst6 : tone_generator
 	 port map (
-		clk_6m		 => clk_6M,			
+		clk			 => clk_6M,			
 		reset_n		 => reset_n,		
 		step_i		 => step_s,			
 		tone_on		 => sw(4),			
