@@ -26,8 +26,8 @@ vcom -2008 -explicit -work work ../../../source/i2s/uni_shift_serial.vhd
 vcom -2008 -explicit -work work ../../../source/i2s/i2s_frame_generator.vhd
 vcom -2008 -explicit -work work ../../../source/i2s/i2s_master.vhd
 
-vcom -2008 -explicit -work work ../../../source/tone_generator/dds.vhd
 vcom -2008 -explicit -work work ../../../source/tone_generator/tone_gen_pkg.vhd
+vcom -2008 -explicit -work work ../../../source/tone_generator/dds.vhd
 vcom -2008 -explicit -work work ../../../source/tone_generator/tone_generator.vhd
 
 vcom -2008 -explicit -work work ../../../source/count_down.vhd
@@ -46,4 +46,4 @@ vcom -2008 -explicit -work work ../../../source/synthi_top_tb.vhd
 # .vhdl Datei ist, sondern der Name der Testbench Entity)
 vsim -voptargs=+acc -t 1ns -lib work work.synthi_top_tb
 do ./wave.do
-run 50 ms
+run 500 ms

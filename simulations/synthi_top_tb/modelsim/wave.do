@@ -36,8 +36,19 @@ add wave -noupdate /synthi_top_tb/DUT/ins3/step_o
 add wave -noupdate /synthi_top_tb/DUT/inst5/sw_sync_3
 add wave -noupdate /synthi_top_tb/DUT/inst5/dds_l_i
 add wave -noupdate /synthi_top_tb/DUT/inst5/dds_r_i
+add wave -noupdate /synthi_top_tb/DUT/inst6/clk
+add wave -noupdate /synthi_top_tb/DUT/inst6/reset_n
+add wave -noupdate /synthi_top_tb/DUT/inst6/step_i
+add wave -noupdate /synthi_top_tb/DUT/inst6/tone_on
+add wave -noupdate /synthi_top_tb/DUT/inst6/note_l
+add wave -noupdate /synthi_top_tb/DUT/inst6/velocity_i
+add wave -noupdate /synthi_top_tb/DUT/inst6/dds_l_o
+add wave -noupdate /synthi_top_tb/DUT/inst6/dds_r_o
+add wave -noupdate /synthi_top_tb/DUT/inst6/clk_signal
+add wave -noupdate /synthi_top_tb/DUT/inst6/reset
+add wave -noupdate /synthi_top_tb/DUT/inst6/dds_o_array
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {6590 ns} 0}
+WaveRestoreCursors {{Cursor 1} {932 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 420
 configure wave -valuecolwidth 100
@@ -53,4 +64,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ns} {12710 ns}
+WaveRestoreZoom {21810 ns} {56610 ns}
