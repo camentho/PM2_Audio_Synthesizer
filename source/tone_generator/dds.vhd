@@ -87,6 +87,7 @@ begin
 			next_count <= count;
 		end if;
 		
+		lut_val := to_signed(LUT(lut_addr), N_AUDIO);
 		lut_addr := to_integer(count(N_CUM-1 downto N_CUM - N_LUT));
 		atte := to_integer(unsigned(attenu));
 	
