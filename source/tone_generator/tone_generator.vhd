@@ -62,7 +62,7 @@ ARCHITECTURE rtl OF tone_generator IS
 		 phi_incr    : in  std_logic_vector(N_CUM-1 downto 0);
 		 step     	 : in  std_logic;
 		 tone_on     : in  std_logic;
-		 attenu      : in  std_logic_vector(3 downto 0);
+		 attenu      : in  std_logic_vector(2 downto 0);
 		 dds         : out std_logic_vector(N_AUDIO-1 downto 0)
 		 );
 	 END COMPONENT dds;
@@ -85,7 +85,7 @@ BEGIN
       phi_incr => LUT_midi2dds(to_integer(unsigned(note_l))),
       step     => step_i,
 		tone_on 	=> tone_on,
-      attenu	=> velocity_i(6 downto 3),
+      attenu	=> velocity_i(6 downto 4),
 		dds      => dds_o_array
 		);
 

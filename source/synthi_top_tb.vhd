@@ -142,8 +142,8 @@ architecture struct of synthi_top_tb is
 
 begin  -- architecture struct
   
-  SW(3)		 <= gpi_signals(3);
-  SW(2 downto 0) <= gpi_signals(2 downto 0);
+
+  SW(9 downto 0) <= gpi_signals(9 downto 0);
   
   -- component instantiation
   

@@ -21,7 +21,6 @@
 
 # Digital AD/DA
 reset_target 20
-set_switches 00 00 00 00
-send_i2s 11 22 33 44
-check_i2s 11 22 33 44
+set_switches 00 00 02 F0
+run_simulation_for 00 10 00 00
 

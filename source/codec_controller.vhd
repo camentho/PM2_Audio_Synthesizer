@@ -89,7 +89,7 @@ write_o <= '0';
 				next_fsm_state <= st_end;
 			end if;
 			if write_done_i then
-				if count <= 9 then
+				if count < 9 then
 					next_count <= count + 1;
 					next_fsm_state <= st_write;
 				else 
