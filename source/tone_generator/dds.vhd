@@ -77,7 +77,7 @@ begin
 
 	VARIABLE lut_val : signed(N_AUDIO-1 downto 0);
 	VARIABLE lut_addr : integer range 0 to L-1;
-	VARIABLE atte : integer range 0 to 2;
+	VARIABLE atte : integer range 0 to 7;
 	
 	begin
 		-- phase counter logic
@@ -95,6 +95,13 @@ begin
 		when 0 => dds <= std_logic_vector(lut_val);
 		when 1 => dds <= std_logic_vector(shift_right(lut_val, 1));
 		when 2 => dds <= std_logic_vector(shift_right(lut_val, 2));
+		when 3 => dds <= std_logic_vector(shift_right(lut_val, 3));
+		when 4 => dds <= std_logic_vector(shift_right(lut_val, 4));
+		when 5 => dds <= std_logic_vector(shift_right(lut_val, 5));
+		when 6 => dds <= std_logic_vector(shift_right(lut_val, 6));
+		when 7 => dds <= std_logic_vector(shift_right(lut_val, 7));
+
+		
 			
 		when others => dds <= std_logic_vector(lut_val);
 		end case;
