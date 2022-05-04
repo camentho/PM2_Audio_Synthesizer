@@ -42,14 +42,17 @@ end dds;
 architecture comb of dds is
 
 -------------------------------------------------------------------------------
--- Constant Declaration
+-- Component Declaration
 -------------------------------------------------------------------------------
-	
-
--------------------------------------------------------------------------------
--- Type Declaration
--------------------------------------------------------------------------------
-
+component counter_register is
+  port(
+		clk_6m			: IN	  std_logic;
+		reset_n   		: IN    std_logic;
+		tone_on			: IN    std_logic;
+		next_count		: IN    unsigned(N_CUM-1 downto 0);
+    	count 		  	: OUT   unsigned(N_CUM-1 downto 0)
+    	);
+end component counter_register;
 
 -------------------------------------------------------------------------------
 -- Signal Declaration
@@ -60,6 +63,15 @@ SIGNAL count, next_count:       unsigned(N_CUM-1 downto 0);
 -- Begin Architecture
 -------------------------------------------------------------------------------
 begin
+
+	count_reg : counter_register
+		port map ( 
+			clk_6m => clk_6m,
+			reset_n => reset_n,
+			tone_on => tone_on,
+			next_count => next_count,
+			count => count
+			);
 
 	phase_counter_logic:PROCESS(all)
 
