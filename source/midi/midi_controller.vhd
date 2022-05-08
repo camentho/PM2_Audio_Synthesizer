@@ -25,7 +25,12 @@ use ieee.std_logic_1164.all;
 
 entity midi_controller is
   port(
-
+    clk_6m        : IN    std_logic;
+    rx_data       : IN    std_logic_vector(7 downto 0);
+    rx_data_rdy   : IN    std_logic;
+    reset_n       : IN    std_logic;
+    note_l        : OUT   std_logic_vector(6 downto 0);
+    velocity      : OUT   std_logic_vector(6 downto 0) 
        );
 end midi_controller;
 
