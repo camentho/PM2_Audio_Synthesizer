@@ -85,6 +85,8 @@ architecture struct of synthi_top is
   signal ack_error   	: std_logic;
   signal ws					: std_logic;
   signal step_s			: std_logic;
+  signal rx_data_rdy		: std_logic;
+  signal rx_data			: std_logic_vector(7 downto 0);
   signal note_signal		: std_logic_vector(6 downto 0);
   signal velocity_signal: std_logic_vector(6 downto 0);
   signal write_data  	: std_logic_vector(15 downto 0);
@@ -193,6 +195,17 @@ architecture struct of synthi_top is
 		dds_r_o			: OUT		std_logic_vector(15 downto 0)
 		);
 	  END COMPONENT tone_generator;
+	  
+	 COMPONENT midi_controller IS
+	  PORT(
+		clk_6m        : IN    std_logic;
+		rx_data       : IN    std_logic_vector(7 downto 0);
+		rx_data_rdy   : IN    std_logic;
+		reset_n       : IN    std_logic;
+		note	        : OUT   std_logic_vector(6 downto 0);
+		velocity      : OUT   std_logic_vector(6 downto 0) 
+		);
+	  END COMPONENT midi_controller;
 
 begin
 
@@ -218,7 +231,9 @@ begin
       reset_n   	 => reset_n,
       serial_in 	 => serial_data,
       hex0      	 => HEX0,
-      hex1      	 => HEX1
+      hex1      	 => HEX1,
+		rx_data_rdy	 => rx_data_rdy,
+		rx_data		 => rx_data
 		);
 	
   inst2 : i2c_master
@@ -280,9 +295,17 @@ begin
 		dds_l_o 		 => dds_l,
 		dds_r_o 		 => dds_r
 		);
+
+	inst7 : midi_controller
+	 port map (
+		clk_6m		 => clk_6M,			
+		reset_n		 => reset_n,		
+		rx_data		 => rx_data,			
+		rx_data_rdy	 => rx_data_rdy,					
+		velocity		 => velocity_signal,	
+		note	 		 => note_signal
+		);
 		
-	note_signal 		 <= sw(9 downto 8) & "00000";
-	velocity_signal 	 <= sw(7 downto 5) & "0000";
 	AUD_DACLRCK			 <= ws;
 	AUD_ADCLRCK			 <= ws;
 	AUD_BCLK				 <= not clk_6M;

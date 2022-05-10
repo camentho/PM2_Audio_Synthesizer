@@ -13,6 +13,7 @@ vcom -2008 -explicit -work work ../../../source/midi/vhdl_hex2sevseg.vhd
 vcom -2008 -explicit -work work ../../../source/midi/uart_controller_fsm.vhd
 vcom -2008 -explicit -work work ../../../source/midi/shiftreg_uart.vhd
 vcom -2008 -explicit -work work ../../../source/midi/output_register.vhd
+vcom -2008 -explicit -work work ../../../source/midi/midi_controller.vhd
 vcom -2008 -explicit -work work ../../../source/midi/uart_top.vhd
 
 vcom -2008 -explicit -work work ../../../source/infrastructure/clock_sync.vhd
