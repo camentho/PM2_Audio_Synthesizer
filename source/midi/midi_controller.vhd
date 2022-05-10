@@ -116,6 +116,7 @@ begin
 	 next_status_reg <= status_reg;
 	 next_data1_reg <= data1_reg;
 	 next_data2_reg <= data2_reg;
+	 note_valid		<= '0';
 	 
 		case fsm_status is
 		
@@ -144,6 +145,7 @@ begin
 				if (rx_data_rdy) then
 					next_data2_reg <= rx_data(6 downto 0);
 					next_fsm_status <= WAIT_STATUS;
+					note_valid		<= '1';
 				end if;
 				
 			when others =>
@@ -153,6 +155,8 @@ begin
 		
 	end process fsm;
 	
+			note 		<= data1_reg;
+			velocity <= data2_reg;
 -------------------------------------------
 -- End Architecture 
 ------------------------------------------- 	

@@ -23,7 +23,7 @@
 reset_target 20
 set_switches 00 00 00 00
 uart_send_data 91
-uart_send_data 41 
-uart_send_data 23
-run_simulation_for 00 00 10 00
+uart_send_data 77 
+uart_send_data 7F
+run_simulation_for 00 01 00 00
 
