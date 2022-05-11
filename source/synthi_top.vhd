@@ -23,6 +23,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 library work;
 use ieee.numeric_std.all;
+use work.tone_gen_pkg.all;
 -------------------------------------------------------------------------------
 
 entity synthi_top is
@@ -88,14 +89,14 @@ architecture struct of synthi_top is
   signal ws					: std_logic;
   signal step_s			: std_logic;
   signal rx_data_rdy		: std_logic;
-  signal note_valid     : std_logic;
+  signal note_valid     : std_logic_vector(9 downto 0);
   signal HEX0S			   : std_logic_vector(3 downto 0);
   signal HEX1S			   : std_logic_vector(3 downto 0);
   signal HEX2S			   : std_logic_vector(3 downto 0);
   signal HEX3S			   : std_logic_vector(3 downto 0);
   signal rx_data			: std_logic_vector(7 downto 0);
-  signal note_signal		: std_logic_vector(6 downto 0);
-  signal velocity_signal: std_logic_vector(6 downto 0);
+  signal note_signal		: t_tone_array;
+  signal velocity_signal: t_tone_array;
   signal write_data  	: std_logic_vector(15 downto 0);
   signal	dacdat_pl 		: std_logic_vector(15 downto 0);  -- path_controller
   signal dacdat_pr 		: std_logic_vector(15 downto 0);
@@ -132,7 +133,8 @@ architecture struct of synthi_top is
 		hex2         : out std_logic_vector(6 downto 0);   -- Display 2
 		hex3         : out std_logic_vector(6 downto 0);   -- Display 3
       rx_data      : out std_logic_vector(7 downto 0);   -- recieverd data
-      rx_data_rdy  : out std_logic);                     -- data ready
+      rx_data_rdy  : out std_logic								-- data ready
+		);                     
   end component uart_top;
   
   component codec_controller is 
@@ -197,9 +199,9 @@ architecture struct of synthi_top is
 		clk				: IN		std_logic;
 		reset_n			: IN		std_logic;
 		step_i			: IN		std_logic;
-		tone_on			: IN		std_logic; -- abhängig von der Anzahl DDS
-		note_l			: IN		std_logic_vector(6 downto 0);
-		velocity_i		: IN		std_logic_vector(6 downto 0);
+		tone_on			: IN		std_logic_vector(9 downto 0); -- abhängig von der Anzahl DDS
+		note_l			: IN		t_tone_array;
+		velocity_i		: IN		t_tone_array;
 		dds_l_o			: OUT		std_logic_vector(15 downto 0);
 		dds_r_o			: OUT		std_logic_vector(15 downto 0)
 		);
@@ -211,9 +213,9 @@ architecture struct of synthi_top is
 		rx_data       : IN    std_logic_vector(7 downto 0);
 		rx_data_rdy   : IN    std_logic;
 		reset_n       : IN    std_logic;
-		note_valid    : OUT    std_logic;
-		note	        : OUT   std_logic_vector(6 downto 0);
-		velocity      : OUT   std_logic_vector(6 downto 0) 
+		note_valid	  : OUT	 std_logic_vector(9 downto 0);
+		note		     : OUT   t_tone_array;
+		velocity      : OUT   t_tone_array
 		);
 	  END COMPONENT midi_controller;
 	  

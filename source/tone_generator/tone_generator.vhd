@@ -26,11 +26,11 @@ ENTITY tone_generator IS
 		clk				: IN		std_logic;
 		reset_n			: IN		std_logic;
 		step_i			: IN		std_logic;
-		tone_on			: IN		std_logic; -- abhängig von der Anzahl DDS
-		note_l			: IN		std_logic_vector(6 downto 0);
-		velocity_i		: IN		std_logic_vector(6 downto 0);
-		dds_l_o			: OUT		std_logic_vector(15 downto 0);
-		dds_r_o			: OUT		std_logic_vector(15 downto 0)
+		tone_on			: IN		std_logic_vector(9 downto 0);
+		note_l			: IN		t_tone_array;
+		velocity_i		: IN		t_tone_array;
+		dds_l_o			: OUT		t_tone_array;
+		dds_r_o			: OUT		t_tone_array
 		);
 END tone_generator;
 
@@ -43,13 +43,13 @@ ARCHITECTURE rtl OF tone_generator IS
   -- Internal signal declarations
   -----------------------------------------------------------------------------
   
+	signal step_i_signal		: std_logic;
   	signal clk_signal			: std_logic;                        	
-	signal reset 				: std_logic;
-  	signal dds_o_array	 	: std_logic_vector(15 downto 0);
-	
-	-- Signale für mehr DDS 
-	-- signal note_array 	 : std_logic_vector(7 downto 0);
-	-- signal velocity_array : std_logic_vector(7 downto 0);
+	signal reset_signal		: std_logic;
+	signal tone_on_signal	: std_logic_vector(9 downto 0);
+  	signal dds_o_array	 	: t_tone_array;
+	signal note_l_array 	 	: t_tone_array;
+	signal velocity_array 	: t_tone_array;
 	
   -----------------------------------------------------------------------------
   -- Component declarations
@@ -81,10 +81,10 @@ BEGIN
     port map 
 	 (
       clk_6m   => clk_signal,
-      reset_n  => reset,
-      phi_incr => LUT_midi2dds(to_integer(unsigned(note_l))),
-      step     => step_i,
-		tone_on 	=> tone_on,
+      reset_n  => reset_signal,
+      phi_incr => LUT_midi2dds(to_integer(unsigned(note_l_array))),
+      step     => step_i_signal,
+		tone_on 	=> tone_on_signal,
       attenu	=> velocity_i(6 downto 4),
 		dds      => dds_o_array
 		);

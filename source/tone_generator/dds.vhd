@@ -99,13 +99,36 @@ begin
 		when 3 => dds <= std_logic_vector(shift_right(lut_val, 4));
 		when 2 => dds <= std_logic_vector(shift_right(lut_val, 5));
 		when 1 => dds <= std_logic_vector(shift_right(lut_val, 6));
-		when 0 => dds <= std_logic_vector(shift_right(lut_val, 7));
-
-		
-			
+		when 0 => dds <= std_logic_vector(shift_right(lut_val, 7));	
 		when others => dds <= std_logic_vector(lut_val);
 		end case;
-
+		
 	end process;
+	
+  --------------------------------------------------
+  -- OUTPUTS FOR POLYPHONY
+  --------------------------------------------------
+	comb_sum_output : process(all)
+		variable var_sum : signed(N_AUDIO-1 downto 0);
+		begin
+			var_sum := (others => '0');
+				if step_i = '1' then
+					dds_sum_loop : for i in 0 to 9 loop
+					var_sum := var_sum + signed(dds_o_array(i));	
+						end loop dds_sum_loop;
+					next_sum_reg <= var_sum;
+				else
+					next_sum_reg <= sum_reg;
+				end if;
+	end process comb_sum_output;
+	
+		reg_sum_output : process(clk_6m, reset_n)
+		begin
+			if reset_n = '0' then
+				sum_reg <= (others => '0');
+			elsif rising_edge(clk_6m) then
+				sum_reg <= next_sum_reg;
+			end if;
+		end process reg_sum_output;
 
 end comb;

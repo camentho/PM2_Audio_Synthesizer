@@ -18,21 +18,28 @@
 -- Date        Version  Author				Description
 -- 2022-05-08  1.0      camentho				Created
 -- 2022-05-10  1.1		roserraf				final version for 1 dds
+-- 2022-05-14  1.2		roserraf				created version for 10 dds
 -------------------------------------------------------------------------------
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.tone_gen_pkg.all;											-- for Array type
 
 entity midi_controller is
   port(
     clk_6m        : IN    std_logic;
-    rx_data       : IN    std_logic_vector(7 downto 0);
+	 reset_n       : IN    std_logic;
     rx_data_rdy   : IN    std_logic;
-    reset_n       : IN    std_logic;
-	 note_valid		: OUT	  std_logic;
-    note		      : OUT   std_logic_vector(6 downto 0);
-    velocity      : OUT   std_logic_vector(6 downto 0) 
+	 new_data_flag : OUT	  std_logic;                      -- new data signal
+	 rx_data       : IN    std_logic_vector(7 downto 0);
+    
+	 -- 10 DDS
+	 note_valid		: OUT	  std_logic_vector(9 downto 0);
+    note		      : OUT   t_tone_array;
+    velocity      : OUT   t_tone_array;
+	
+	
     );
 end midi_controller;
 
@@ -48,6 +55,10 @@ architecture contr of midi_controller is
  signal status_reg,  next_status_reg   : std_logic_vector(7 downto 0);
  signal data1_reg,   next_data1_reg    : std_logic_vector(6 downto 0);
  signal data2_reg,   next_data2_reg    : std_logic_vector(6 downto 0);
+ 
+ signal reg_note, next_reg_note				: t_tone_array;
+ signal reg_velocity, next_reg_velocity	: t_tone_array;
+ signal reg_note_on, next_reg_note_on		: std_logic_vector(9 downto 0);
 
 -------------------------------------------------------------------------------
 -- Begin Architecture
@@ -105,11 +116,53 @@ begin
 
     end if;
   end process;
+    -- reg_note_on
+  flip_flops_note_on : process(all)
+  begin
+    if reset_n = '0' then
+      reg_note_on <= (others => '0');
+
+    elsif rising_edge(clk) then
+      reg_note_on <= next_reg_note_on;
+
+    end if;
+  end process;
   
+  -- reg_note
+  flip_flops_reg_note : process(all)
+  begin
+    if reset_n = '0' then
+			for i in 0 to 9 loop
+				reg_note(i) <= "0000000";
+			end loop;
+
+    elsif rising_edge(clk) then
+      reg_note <= next_reg_note;
+
+    end if;
+  end process;
+  
+  -- reg_velocity
+  flip_flops_reg_velocity : process(all)
+  begin
+    if reset_n = '0' then
+			for i in 0 to 9 loop
+				reg_velocity(i) <= "0000000";
+			end loop;
+
+    elsif rising_edge(clk) then
+      reg_velocity <= next_reg_velocity;
+
+    end if;
+  end process;
+
+  --------------------------------------------------
+  -- PROCESS FOR FSM-STATE
+  --------------------------------------------------
   
   
 	fsm : process(all)
-	
+		
 	begin
 	
 	 -- default statements for loop
@@ -156,8 +209,89 @@ begin
 		
 	end process fsm;
 	
-			note 		<= data1_reg;
-			velocity <= data2_reg;
+  --------------------------------------------------
+  -- PROCESS FOR POLYPHONIE
+  --------------------------------------------------
+ 
+	polyphonie	: process (all)
+	
+	variable note_available	: std_logic := '0';
+	variable note_written	: std_logic := '0';
+	
+	begin
+	
+	-- DEFAULT STATEMENTS
+	next_reg_note_on <= reg_note_on;
+	next_reg_note <= reg_note;
+	next_reg_velocity <= reg_velocity;
+	
+		if (new_data_flag) then
+		
+			note_available := '0';
+			note_written := '0';
+		
+		
+			-- Überprüfung ob Note bereits im MIDI Array enthalten ist
+			for i in 0 to 9 loop
+			
+				if reg_note(i) = data1_reg and reg_note_on(i) = '1' then 	-- Dupplikat gefunden
+					
+					note_available := '1';
+					
+					if status_reg(4) = '0' then   	-- Nicht mehr gedrückt Note off
+						next_reg_note_on(i) <= '0'; 	-- Note ausschalten
+					
+					elsif status_reg(4) = '1' and data2_reg = "00000000" then
+						
+						next_reg_note_on(i) <= '0';	-- Note ausscchalten wenn velocity = 0
+					
+					end if;
+				end if;
+			
+			end loop;
+						
+
+			-- Neue Note im MIDI Array setzen, wenn Platz vorhanden ist
+			if note_available = '0' then 			-- Wenn diese Note noch kein Eintrag hat
+			
+				-- Suche nach einen neuen Platz & trage es ein
+				for i in 0 to 9 loop
+					if note_written = '0' then			-- Restlichen Loop ignorieren, wenn Note vorhanden ist
+				
+						-- Bei Freien Platz eintragen ODER als letzter Eintrag eintragen
+						if (reg_note_on(i) = '0' or i = 9) and status_reg(4) = '1' then 
+						
+							-- Note setzen
+							next_reg_note(i) <= data1_reg;
+							next_reg_velocity(i) <= data2_reg;
+							next_reg_note_on(i) <= '1';
+						
+							note_written := '1';
+						end if;
+					
+					end if;
+					
+				end loop;
+		
+			end if;
+		
+		end if;
+		
+		
+  --------------------------------------------------
+  -- SET SIGNALS
+  --------------------------------------------------
+		for i in 0 to 9 loop
+		
+			note(i) 		<= reg_note(i);
+			velocity(i) <= reg_velocity(i);
+			note_on(i) 	<= reg_note_on(i);
+		
+		end loop;
+  
+  
+	end process polyphonie;
+
 -------------------------------------------
 -- End Architecture 
 ------------------------------------------- 	
