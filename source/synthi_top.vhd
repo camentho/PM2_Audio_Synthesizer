@@ -54,6 +54,8 @@ entity synthi_top is
 
     HEX0   		 : out std_logic_vector(6 downto 0);  -- output for HEX 0 display
     HEX1  		 : out std_logic_vector(6 downto 0);  -- output for HEX 0 display
+	 HEX2  		 : out std_logic_vector(6 downto 0);  -- output for HEX 0 display
+	 HEX3  		 : out std_logic_vector(6 downto 0);  -- output for HEX 0 display
     LEDR_0 		 : out std_logic;                     -- red LED
     LEDR_1 		 : out std_logic;                     -- red LED
     LEDR_2		 : out std_logic;                     -- red LED
@@ -87,6 +89,10 @@ architecture struct of synthi_top is
   signal step_s			: std_logic;
   signal rx_data_rdy		: std_logic;
   signal note_valid     : std_logic;
+  signal HEX0S			   : std_logic_vector(3 downto 0);
+  signal HEX1S			   : std_logic_vector(3 downto 0);
+  signal HEX2S			   : std_logic_vector(3 downto 0);
+  signal HEX3S			   : std_logic_vector(3 downto 0);
   signal rx_data			: std_logic_vector(7 downto 0);
   signal note_signal		: std_logic_vector(6 downto 0);
   signal velocity_signal: std_logic_vector(6 downto 0);
@@ -123,6 +129,8 @@ architecture struct of synthi_top is
       serial_in    : in  std_logic;                      -- data input
       hex0         : out std_logic_vector(6 downto 0);   -- Display 0
       hex1         : out std_logic_vector(6 downto 0);   -- Display 1
+		hex2         : out std_logic_vector(6 downto 0);   -- Display 2
+		hex3         : out std_logic_vector(6 downto 0);   -- Display 3
       rx_data      : out std_logic_vector(7 downto 0);   -- recieverd data
       rx_data_rdy  : out std_logic);                     -- data ready
   end component uart_top;
@@ -208,12 +216,25 @@ architecture struct of synthi_top is
 		velocity      : OUT   std_logic_vector(6 downto 0) 
 		);
 	  END COMPONENT midi_controller;
+	  
+	 component vhdl_hex2sevseg
+		port(
+			data_in	  : in  std_logic_vector(3 downto 0);
+         seg_o		  : out std_logic_vector(6 downto 0)
+         );
+		end component;
 
 begin
 
 	-----------------------------------------------------------------------------
 	-- Architecture Description
 	-----------------------------------------------------------------------------
+	
+	-- Sevensegment
+	HEX0S			 <= note_signal(3 downto 0);
+	HEX1S			 <= '0' & note_signal(6 downto 4);
+	HEX2S			 <= velocity_signal(3 downto 0);
+	HEX3S			 <= '0' & velocity_signal(6 downto 4);
 
   inst0 : Infrastructure
     port map (
@@ -232,8 +253,6 @@ begin
       clk_6M    	 => clk_6M,
       reset_n   	 => reset_n,
       serial_in 	 => serial_data,
-      hex0      	 => HEX0,
-      hex1      	 => HEX1,
 		rx_data_rdy	 => rx_data_rdy,
 		rx_data		 => rx_data
 		);
@@ -308,6 +327,25 @@ begin
 		note_valid	 => note_valid,
 		note	 		 => note_signal
 		);
+		
+	inst8 : vhdl_hex2sevseg
+    port map(data_in  => HEX0S,
+             seg_o    => HEX0);
+
+
+	inst9 : vhdl_hex2sevseg
+    port map(data_in  => HEX1S,
+             seg_o    => HEX1);
+				 
+				 
+	inst10 : vhdl_hex2sevseg
+    port map(data_in  => HEX2S,
+             seg_o    => HEX2);
+
+				 
+	inst11 : vhdl_hex2sevseg
+    port map(data_in  => HEX3S,
+             seg_o    => HEX3);
 		
 	AUD_DACLRCK			 <= ws;
 	AUD_ADCLRCK			 <= ws;

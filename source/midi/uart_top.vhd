@@ -31,7 +31,9 @@ entity uart_top is
       rx_data_rdy : out std_logic;
       rx_data     : out std_logic_vector(7 downto 0);
       HEX0        : out std_logic_vector(6 downto 0);
-      HEX1        : out std_logic_vector(6 downto 0)
+      HEX1        : out std_logic_vector(6 downto 0);
+		HEX2        : out std_logic_vector(6 downto 0);   -- Display 2
+		HEX3        : out std_logic_vector(6 downto 0)    -- Display 3
       );
 end uart_top;
 
@@ -187,23 +189,6 @@ begin
              data_valid    => SYNTHESIZED_WIRE_25);
 
 
-  b2v_inst6 : output_register
-    port map(clk         => clk_6M,
-             reset_n     => reset_n,
-             data_valid  => SYNTHESIZED_WIRE_25,
-             parallel_in => data,
-             hex_lsb_out => SYNTHESIZED_WIRE_28,
-             hex_msb_out => SYNTHESIZED_WIRE_31);
-
-
-  b2v_inst7 : vhdl_hex2sevseg
-    port map(data_in  => SYNTHESIZED_WIRE_28,
-             seg_o    => HEX0);
-
-
-  b2v_inst8 : vhdl_hex2sevseg
-    port map(data_in  => SYNTHESIZED_WIRE_31,
-             seg_o    => HEX1);
 
 
 end struct;

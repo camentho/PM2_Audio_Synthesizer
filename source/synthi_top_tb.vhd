@@ -60,6 +60,8 @@ architecture struct of synthi_top_tb is
       AUD_SDAT    : inout std_logic;
       HEX0        : out   std_logic_vector(6 downto 0);
       HEX1        : out   std_logic_vector(6 downto 0);
+		HEX2        : out   std_logic_vector(6 downto 0);
+      HEX3        : out   std_logic_vector(6 downto 0);
       LEDR_0      : out   std_logic;
       LEDR_1      : out   std_logic;
       LEDR_2      : out   std_logic;
@@ -110,6 +112,8 @@ architecture struct of synthi_top_tb is
   signal AUD_SDAT    : std_logic;
   signal HEX0        : std_logic_vector(6 downto 0);
   signal HEX1        : std_logic_vector(6 downto 0);
+  signal HEX2        : std_logic_vector(6 downto 0);
+  signal HEX3        : std_logic_vector(6 downto 0);
   signal LEDR_0      : std_logic;
   signal LEDR_1      : std_logic;
   signal LEDR_2      : std_logic;
@@ -168,6 +172,8 @@ begin  -- architecture struct
       AUD_SDAT    => AUD_SDAT,
       HEX0        => HEX0,
       HEX1        => HEX1,
+		HEX2        => HEX2,
+      HEX3        => HEX3,
       LEDR_0      => LEDR_0,
       LEDR_1      => LEDR_1,
       LEDR_2      => LEDR_2,
@@ -260,9 +266,11 @@ begin  -- architecture struct
         uar_sim(tv, usb_txd);
 		  elsif cmd.all = "check_display_hex0" then
         hex_chk(tv, hex0);
-      elsif cmd.all = "check_display_hex0" then
-        hex_chk(tv, hex0);
       elsif cmd.all = "check_display_hex1" then
+        hex_chk(tv, hex0);
+      elsif cmd.all = "check_display_hex2" then
+        hex_chk(tv, hex1);
+		  elsif cmd.all = "check_display_hex3" then
         hex_chk(tv, hex1);
 		  elsif cmd.all = "set_switches" then
         gpi_sim(tv, gpi_signals);

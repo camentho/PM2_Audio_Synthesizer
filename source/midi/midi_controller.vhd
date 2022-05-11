@@ -16,7 +16,8 @@
 -------------------------------------------------------------------------------
 -- Revisions  :
 -- Date        Version  Author				Description
--- 2022-05-08  1.0      camentho				Created 
+-- 2022-05-08  1.0      camentho				Created
+-- 2022-05-10  1.1		roserraf				final version for 1 dds
 -------------------------------------------------------------------------------
 
 library ieee;
