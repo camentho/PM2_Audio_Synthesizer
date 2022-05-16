@@ -181,6 +181,23 @@ See the [open issues](https://github.com/camentho/PM2_Audio_Synthesizer/issues) 
 This project is developed by team 2
 
 <!-- readme: contributors -start -->
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/camentho">
+            <img src="https://avatars.githubusercontent.com/u/101705711?v=4" width="100;" alt="camentho"/>
+            <br />
+            <sub><b>Camentho</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/RafaelRoser">
+            <img src="https://avatars.githubusercontent.com/u/101706466?v=4" width="100;" alt="RafaelRoser"/>
+            <br />
+            <sub><b>RafaelRoser</b></sub>
+        </a>
+    </td></tr>
+</table>
 <!-- readme: contributors -end -->
 
 <p align="right">(<a href="#top">back to top</a>)</p>
