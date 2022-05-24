@@ -24,7 +24,7 @@
     <img src="Images/logo.svg" alt="Logo" width="228" height="160">
   </a>
 
-<h3 align="center">PM2 Audio Synthesizer</h3>
+<h3 align="center">PM2 Audio Synthesiser</h3>
 
   <p align="center">
     Source code to create an Audio synthesizer with the intel development board <a href="https://www.intel.com/content/dam/www/programmable/us/en/portal/dsn/42/doc-us-dsnbk-42-2912030810549-de10-lite-user-manual.pdf"> DE10-Lite</a>, and symulation files for Altera modelsym
@@ -151,9 +151,9 @@ To simulate:
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Once the program is compiled and loaded on to the hardware, all that is needed is to connect a midi device via USB, and a speaker to the dedicated outgoing jack, to be able to enjoy wonderful tunes  
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+_For more examples, please refer to the [Documentation](https://www.youtube.com/watch?v=dQw4w9WgXcQ)_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
