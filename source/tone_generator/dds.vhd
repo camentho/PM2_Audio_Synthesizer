@@ -75,12 +75,13 @@ begin
 			);
 
 	phase_counter_logic:PROCESS(all)
-
-	VARIABLE lut_val : signed(N_AUDIO-1 downto 0);
-	VARIABLE lut_addr : integer range 0 to L-1;
-	VARIABLE atte : integer range 0 to 7;
 	
+	variable lut_addr : integer range 0 to L-1;			-- LUT Adressen-Index		
+	variable lut_val 	: signed(N_AUDIO-1 downto 0);		-- LUT Wert
+	variable atte		: integer range 0 to 7;
+
 	begin
+	
 		-- phase counter logic
 		if (step) then
 			next_count <= count + unsigned(phi_incr);
@@ -91,18 +92,18 @@ begin
 		lut_val := to_signed(LUT(lut_addr), N_AUDIO);
 		lut_addr := to_integer(count(N_CUM-1 downto N_CUM - N_LUT));
 		atte := to_integer(unsigned(attenu));
-	
-		case atte is
-		when 7 => dds <= std_logic_vector(lut_val);
-		when 6 => dds <= std_logic_vector(shift_right(lut_val, 1));
-		when 5 => dds <= std_logic_vector(shift_right(lut_val, 2));
-		when 4 => dds <= std_logic_vector(shift_right(lut_val, 3));
-		when 3 => dds <= std_logic_vector(shift_right(lut_val, 4));
-		when 2 => dds <= std_logic_vector(shift_right(lut_val, 5));
-		when 1 => dds <= std_logic_vector(shift_right(lut_val, 6));
-		when 0 => dds <= std_logic_vector(shift_right(lut_val, 7));	
-		when others => dds <= std_logic_vector(lut_val);
-		end case;
+		dds <= std_logic_vector(lut_val);
+--		case atte is
+--		when 7 => dds <= std_logic_vector(lut_val);
+--		when 6 => dds <= std_logic_vector(shift_right(lut_val, 1));
+--		when 5 => dds <= std_logic_vector(shift_right(lut_val, 2));
+--		when 4 => dds <= std_logic_vector(shift_right(lut_val, 3));
+--		when 3 => dds <= std_logic_vector(shift_right(lut_val, 4));
+--		when 2 => dds <= std_logic_vector(shift_right(lut_val, 5));
+--		when 1 => dds <= std_logic_vector(shift_right(lut_val, 6));
+--		when 0 => dds <= std_logic_vector(shift_right(lut_val, 7));	
+--		when others => 
+--		end case;
 		
 	end process;
 	

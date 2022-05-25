@@ -56,7 +56,7 @@ architecture contr of midi_controller is
  signal reg_note, next_reg_note				: t_tone_array;
  signal reg_velocity, next_reg_velocity	: t_tone_array;
  signal reg_note_on, next_reg_note_on		: std_logic_vector(9 downto 0);
-
+ signal next_new_data_flag						: std_logic;
 -------------------------------------------------------------------------------
 -- Begin Architecture
 -------------------------------------------------------------------------------
@@ -149,6 +149,7 @@ begin
 
     elsif rising_edge(clk_6m) then
       reg_velocity <= next_reg_velocity;
+		new_data_flag<= next_new_data_flag;
 
     end if;
   end process;
@@ -167,7 +168,7 @@ begin
 	 next_status_reg <= status_reg;
 	 next_data1_reg <= data1_reg;
 	 next_data2_reg <= data2_reg;
-	 new_data_flag		<= '0';
+	 next_new_data_flag		<= '0';
 	 
 		case fsm_status is
 		
@@ -196,7 +197,7 @@ begin
 				if (rx_data_rdy) then
 					next_data2_reg <= rx_data(6 downto 0);
 					next_fsm_status <= WAIT_STATUS;
-					new_data_flag		<= '1';
+					next_new_data_flag <= '1';
 				end if;
 				
 			when others =>
@@ -217,7 +218,7 @@ begin
 	
 	begin
 	
-	-- DEFAULT STATEMENTS
+
 	next_reg_note_on <= reg_note_on;
 	next_reg_note <= reg_note;
 	next_reg_velocity <= reg_velocity;
