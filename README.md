@@ -184,17 +184,17 @@ This project is developed by team 2
 <table>
 <tr>
     <td align="center">
-        <a href="https://github.com/camentho">
-            <img src="https://avatars.githubusercontent.com/u/101705711?v=4" width="100;" alt="camentho"/>
-            <br />
-            <sub><b>Camentho</b></sub>
-        </a>
-    </td>
-    <td align="center">
         <a href="https://github.com/RafaelRoser">
             <img src="https://avatars.githubusercontent.com/u/101706466?v=4" width="100;" alt="RafaelRoser"/>
             <br />
             <sub><b>RafaelRoser</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/camentho">
+            <img src="https://avatars.githubusercontent.com/u/101705711?v=4" width="100;" alt="camentho"/>
+            <br />
+            <sub><b>Camentho</b></sub>
         </a>
     </td></tr>
 </table>
