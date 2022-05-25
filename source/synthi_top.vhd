@@ -79,7 +79,8 @@ architecture struct of synthi_top is
   -----------------------------------------------------------------------------
   -- Internal signal declarations
   -----------------------------------------------------------------------------
- 
+  
+
   signal clk_6M      	: std_logic;       -- internal clock
   signal reset_n     	: std_logic;       -- reset signal
   signal serial_data 	: std_logic;       -- serial data
@@ -89,7 +90,7 @@ architecture struct of synthi_top is
   signal ws					: std_logic;
   signal step_s			: std_logic;
   signal rx_data_rdy		: std_logic;
-  signal note_valid     : std_logic_vector(9 downto 0);
+  signal note_on	      : std_logic_vector(9 downto 0);
   signal HEX0S			   : std_logic_vector(3 downto 0);
   signal HEX1S			   : std_logic_vector(3 downto 0);
   signal HEX2S			   : std_logic_vector(3 downto 0);
@@ -235,10 +236,10 @@ begin
 	-----------------------------------------------------------------------------
 	
 	-- Sevensegment
-	HEX0S			 <= note_signal(3 downto 0);
-	HEX1S			 <= '0' & note_signal(6 downto 4);
-	HEX2S			 <= velocity_signal(3 downto 0);
-	HEX3S			 <= '0' & velocity_signal(6 downto 4);
+	--HEX0S			 <= std_logic_vector(note_signal(3 downto 0));
+	--HEX1S			 <= '0' & note_signal(6 downto 4);
+	--HEX2S			 <= velocity_signal(3 downto 0);
+	--HEX3S			 <= '0' & velocity_signal(6 downto 4);
 
   inst0 : Infrastructure
     port map (
@@ -314,7 +315,7 @@ begin
 		clk			 => clk_6M,			
 		reset_n		 => reset_n,		
 		step_i		 => step_s,			
-		tone_on		 => note_valid,			
+		tone_on		 => note_on,			
 		note_l		 => note_signal,			
 		velocity_i	 => velocity_signal,	
 		dds_l_o 		 => dds_l,
@@ -328,28 +329,28 @@ begin
 		rx_data		 => rx_data,			
 		rx_data_rdy	 => rx_data_rdy,					
 		velocity		 => velocity_signal,
-		note_valid	 => note_valid,
+		note_on	 	 => note_on,
 		note	 		 => note_signal
 		);
 		
-	inst8 : vhdl_hex2sevseg
-    port map(data_in  => HEX0S,
-             seg_o    => HEX0);
+	--inst8 : vhdl_hex2sevseg
+    --port map(data_in  => HEX0S,
+    --         seg_o    => HEX0);
 
 
-	inst9 : vhdl_hex2sevseg
-    port map(data_in  => HEX1S,
-             seg_o    => HEX1);
+	--inst9 : vhdl_hex2sevseg
+   -- port map(data_in  => HEX1S,
+    --         seg_o    => HEX1);
 				 
 				 
-	inst10 : vhdl_hex2sevseg
-    port map(data_in  => HEX2S,
-             seg_o    => HEX2);
+	--inst10 : vhdl_hex2sevseg
+    --port map(data_in  => HEX2S,
+     --        seg_o    => HEX2);
 
 				 
-	inst11 : vhdl_hex2sevseg
-    port map(data_in  => HEX3S,
-             seg_o    => HEX3);
+	--inst11 : vhdl_hex2sevseg
+  --  port map(data_in  => HEX3S,
+   --          seg_o    => HEX3);
 		
 	AUD_DACLRCK			 <= ws;
 	AUD_ADCLRCK			 <= ws;

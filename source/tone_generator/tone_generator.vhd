@@ -29,8 +29,8 @@ ENTITY tone_generator IS
 		tone_on			: IN		std_logic_vector(9 downto 0);
 		note_l			: IN		t_tone_array;
 		velocity_i		: IN		t_tone_array;
-		dds_l_o			: OUT		t_tone_array;
-		dds_r_o			: OUT		t_tone_array
+		dds_l_o			: OUT		 signed(N_AUDIO-1 downto 0);
+		dds_r_o			: OUT		 signed(N_AUDIO-1 downto 0)
 		);
 END tone_generator;
 
@@ -42,8 +42,10 @@ ARCHITECTURE rtl OF tone_generator IS
   -----------------------------------------------------------------------------
   -- Internal signal declarations
   -----------------------------------------------------------------------------
-  type t_dds_o_array is array (0 to 9) of std_logic_vector(N_AUDIO-1 downto 0);
   
+   type t_dds_o_array is array (0 to 9) of std_logic_vector(N_AUDIO-1 downto 0);
+
+	SIGNAL sum_reg,next_sum_reg	: signed(N_AUDIO-1 downto 0);
 	signal step_i_signal		: std_logic;
   	signal clk_signal			: std_logic;                        	
 	signal reset_signal		: std_logic;
@@ -73,11 +75,14 @@ ARCHITECTURE rtl OF tone_generator IS
 -------------------------------------------
 BEGIN
 
-  clk_signal <= clk;
-  reset 		 <= reset_n;
-  step_i		 <= step_i_signal;
-  dds_l_o 	 <= dds_o_array;
-  dds_r_o 	 <= dds_o_array;
+  clk_signal 	<= clk;
+  reset_signal	<= reset_n;
+  step_i_signal<= step_i;
+  velocity_array<= velocity_i;
+  note_l_array <= note_l;
+  tone_on_signal<= tone_on;
+  dds_l_o 	 	<= sum_reg;
+  dds_r_o 		<= sum_reg;
   
 	dds_inst_gen : for i in 0 to 9 generate
 	inst_dds : dds
@@ -87,9 +92,35 @@ BEGIN
 			phi_incr		=> LUT_midi2dds(to_integer(unsigned(note_l(i)))),
 			step	 		=> step_i_signal,
 			tone_on	 	=> tone_on_signal(i), 			-- now std_logic_vector
-			attenu	 	=> velocity_i(6 downto 4),		-- temporary fixed, connect to custom logic
+			attenu	 	=> velocity_array(6 downto 4),		-- temporary fixed, connect to custom logic
 			dds	 		=> dds_o_array(i)
 			);
 		end generate dds_inst_gen;
-
+		
+  --------------------------------------------------
+  -- LOGIC FOR POLYPHONY
+  --------------------------------------------------
+	comb_sum_output : process(all)
+		variable var_sum : signed(N_AUDIO-1 downto 0);
+		begin
+			var_sum := (others => '0');
+				if step_i = '1' then
+					dds_sum_loop : for i in 0 to 9 loop
+					var_sum := var_sum + signed(dds_o_array(i));	
+						end loop dds_sum_loop;
+					next_sum_reg <= var_sum;
+				else
+					next_sum_reg <= sum_reg;
+				end if;
+	end process comb_sum_output;
+	
+		reg_sum_output : process(all)
+		begin
+			if reset_n = '0' then
+				sum_reg <= (others => '0');
+			elsif rising_edge(clk) then
+				sum_reg <= next_sum_reg;
+			end if;
+		end process reg_sum_output;
+		
 END rtl;
