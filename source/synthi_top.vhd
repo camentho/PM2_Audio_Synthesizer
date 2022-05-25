@@ -235,11 +235,11 @@ begin
 	-- Architecture Description
 	-----------------------------------------------------------------------------
 	
-	-- Sevensegment
-	--HEX0S			 <= std_logic_vector(note_signal(3 downto 0));
-	--HEX1S			 <= '0' & note_signal(6 downto 4);
-	--HEX2S			 <= velocity_signal(3 downto 0);
-	--HEX3S			 <= '0' & velocity_signal(6 downto 4);
+	--Sevensegment
+	HEX0S			 <= note_signal(0)(3 downto 0);
+	HEX1S			 <= '0' & note_signal(0)(6 downto 4);
+	HEX2S			 <= velocity_signal(0)(3 downto 0);
+	HEX3S			 <= '0' & velocity_signal(0)(6 downto 4);
 
   inst0 : Infrastructure
     port map (
@@ -333,24 +333,24 @@ begin
 		note	 		 => note_signal
 		);
 		
-	--inst8 : vhdl_hex2sevseg
-    --port map(data_in  => HEX0S,
-    --         seg_o    => HEX0);
+	inst8 : vhdl_hex2sevseg
+    port map(data_in  => HEX0S,
+             seg_o    => HEX0);
 
 
-	--inst9 : vhdl_hex2sevseg
-   -- port map(data_in  => HEX1S,
-    --         seg_o    => HEX1);
+	inst9 : vhdl_hex2sevseg
+		port map(data_in  => HEX1S,
+            seg_o    => HEX1);
 				 
 				 
-	--inst10 : vhdl_hex2sevseg
-    --port map(data_in  => HEX2S,
-     --        seg_o    => HEX2);
+	inst10 : vhdl_hex2sevseg
+    port map(data_in  => HEX2S,
+             seg_o    => HEX2);
 
 				 
-	--inst11 : vhdl_hex2sevseg
-  --  port map(data_in  => HEX3S,
-   --          seg_o    => HEX3);
+	inst11 : vhdl_hex2sevseg
+		port map(data_in  => HEX3S,
+            seg_o    => HEX3);
 		
 	AUD_DACLRCK			 <= ws;
 	AUD_ADCLRCK			 <= ws;

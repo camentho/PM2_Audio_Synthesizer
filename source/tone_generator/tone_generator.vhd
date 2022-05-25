@@ -92,7 +92,7 @@ BEGIN
 			phi_incr		=> LUT_midi2dds(to_integer(unsigned(note_l(i)))),
 			step	 		=> step_i_signal,
 			tone_on	 	=> tone_on_signal(i), 			-- now std_logic_vector
-			attenu	 	=> velocity_array(6 downto 4),		-- temporary fixed, connect to custom logic
+			attenu	 	=> velocity_array(i)(6 downto 4),		-- temporary fixed, connect to custom logic
 			dds	 		=> dds_o_array(i)
 			);
 		end generate dds_inst_gen;
