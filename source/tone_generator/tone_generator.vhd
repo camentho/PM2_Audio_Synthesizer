@@ -29,8 +29,8 @@ ENTITY tone_generator IS
 		tone_on			: IN		std_logic_vector(9 downto 0);
 		note_l			: IN		t_tone_array;
 		velocity_i		: IN		t_tone_array;
-		dds_l_o			: OUT		 signed(N_AUDIO-1 downto 0);
-		dds_r_o			: OUT		 signed(N_AUDIO-1 downto 0)
+		dds_l_o			: OUT		std_logic_vector(15 downto 0);
+		dds_r_o			: OUT		std_logic_vector(15 downto 0)
 		);
 END tone_generator;
 
@@ -45,7 +45,7 @@ ARCHITECTURE rtl OF tone_generator IS
   
    type t_dds_o_array is array (0 to 9) of std_logic_vector(N_AUDIO-1 downto 0);
 
-	SIGNAL sum_reg,next_sum_reg	: signed(N_AUDIO-1 downto 0);
+	SIGNAL sum_reg,next_sum_reg	: std_logic_vector(15 downto 0);
 	signal step_i_signal		: std_logic;
   	signal clk_signal			: std_logic;                        	
 	signal reset_signal		: std_logic;
@@ -108,7 +108,7 @@ BEGIN
 					dds_sum_loop : for i in 0 to 9 loop
 					var_sum := var_sum + signed(dds_o_array(i));	
 						end loop dds_sum_loop;
-					next_sum_reg <= var_sum;
+					next_sum_reg <= std_logic_vector(var_sum);
 				else
 					next_sum_reg <= sum_reg;
 				end if;
