@@ -79,7 +79,7 @@ architecture struct of synthi_top is
   -----------------------------------------------------------------------------
   -- Internal signal declarations
   -----------------------------------------------------------------------------
-
+ 
   signal clk_6M      	: std_logic;       -- internal clock
   signal reset_n     	: std_logic;       -- reset signal
   signal serial_data 	: std_logic;       -- serial data
@@ -210,10 +210,12 @@ architecture struct of synthi_top is
 	 COMPONENT midi_controller IS
 	  PORT(
 		clk_6m        : IN    std_logic;
-		rx_data       : IN    std_logic_vector(7 downto 0);
-		rx_data_rdy   : IN    std_logic;
 		reset_n       : IN    std_logic;
-		note_valid	  : OUT	 std_logic_vector(9 downto 0);
+		rx_data_rdy   : IN    std_logic;
+		new_data_flag : OUT	 std_logic;                      -- new data signal
+		rx_data       : IN    std_logic_vector(7 downto 0);
+		-- 10 DDS
+		note_on		  : OUT	 std_logic_vector(9 downto 0);
 		note		     : OUT   t_tone_array;
 		velocity      : OUT   t_tone_array
 		);

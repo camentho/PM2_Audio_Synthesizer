@@ -42,12 +42,13 @@ ARCHITECTURE rtl OF tone_generator IS
   -----------------------------------------------------------------------------
   -- Internal signal declarations
   -----------------------------------------------------------------------------
+  type t_dds_o_array is array (0 to 9) of std_logic_vector(N_AUDIO-1 downto 0);
   
 	signal step_i_signal		: std_logic;
   	signal clk_signal			: std_logic;                        	
 	signal reset_signal		: std_logic;
 	signal tone_on_signal	: std_logic_vector(9 downto 0);
-  	signal dds_o_array	 	: t_tone_array;
+  	signal dds_o_array	 	: t_dds_o_array;
 	signal note_l_array 	 	: t_tone_array;
 	signal velocity_array 	: t_tone_array;
 	
@@ -74,19 +75,21 @@ BEGIN
 
   clk_signal <= clk;
   reset 		 <= reset_n;
+  step_i		 <= step_i_signal;
   dds_l_o 	 <= dds_o_array;
   dds_r_o 	 <= dds_o_array;
   
-  dds_0: dds
-    port map 
-	 (
-      clk_6m   => clk_signal,
-      reset_n  => reset_signal,
-      phi_incr => LUT_midi2dds(to_integer(unsigned(note_l_array))),
-      step     => step_i_signal,
-		tone_on 	=> tone_on_signal,
-      attenu	=> velocity_i(6 downto 4),
-		dds      => dds_o_array
-		);
+	dds_inst_gen : for i in 0 to 9 generate
+	inst_dds : dds
+		port map(
+			clk_6m 		=> clk_signal,
+			reset_n 		=> reset_signal,
+			phi_incr		=> LUT_midi2dds(to_integer(unsigned(note_l(i)))),
+			step	 		=> step_i_signal,
+			tone_on	 	=> tone_on_signal(i), 			-- now std_logic_vector
+			attenu	 	=> velocity_i(6 downto 4),		-- temporary fixed, connect to custom logic
+			dds	 		=> dds_o_array(i)
+			);
+		end generate dds_inst_gen;
 
 END rtl;

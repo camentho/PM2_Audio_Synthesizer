@@ -55,9 +55,14 @@ component counter_register is
 end component counter_register;
 
 -------------------------------------------------------------------------------
--- Signal Declaration
+-- TYPE & Signal Declaration
 -------------------------------------------------------------------------------
-SIGNAL count, next_count:       unsigned(N_CUM-1 downto 0);
+
+type t_dds_o_array is array (0 to 9) of std_logic_vector(N_AUDIO-1 downto 0);
+
+	SIGNAL count, next_count		:		unsigned(N_CUM-1 downto 0);
+	SIGNAL sum_reg,next_sum_reg	:		signed(N_AUDIO-1 downto 0);
+	SIGNAL dds_o_array 				: 		t_dds_o_array;
 
 -------------------------------------------------------------------------------
 -- Begin Architecture
@@ -106,13 +111,13 @@ begin
 	end process;
 	
   --------------------------------------------------
-  -- OUTPUTS FOR POLYPHONY
+  -- LOGIC FOR POLYPHONY
   --------------------------------------------------
 	comb_sum_output : process(all)
 		variable var_sum : signed(N_AUDIO-1 downto 0);
 		begin
 			var_sum := (others => '0');
-				if step_i = '1' then
+				if step = '1' then
 					dds_sum_loop : for i in 0 to 9 loop
 					var_sum := var_sum + signed(dds_o_array(i));	
 						end loop dds_sum_loop;
@@ -130,5 +135,7 @@ begin
 				sum_reg <= next_sum_reg;
 			end if;
 		end process reg_sum_output;
+		
+	
 
 end comb;

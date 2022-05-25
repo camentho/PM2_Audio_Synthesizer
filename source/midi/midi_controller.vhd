@@ -33,13 +33,10 @@ entity midi_controller is
     rx_data_rdy   : IN    std_logic;
 	 new_data_flag : OUT	  std_logic;                      -- new data signal
 	 rx_data       : IN    std_logic_vector(7 downto 0);
-    
 	 -- 10 DDS
-	 note_valid		: OUT	  std_logic_vector(9 downto 0);
+	 note_on			: OUT	  std_logic_vector(9 downto 0);
     note		      : OUT   t_tone_array;
-    velocity      : OUT   t_tone_array;
-	
-	
+    velocity      : OUT   t_tone_array
     );
 end midi_controller;
 
@@ -122,7 +119,7 @@ begin
     if reset_n = '0' then
       reg_note_on <= (others => '0');
 
-    elsif rising_edge(clk) then
+    elsif rising_edge(clk_6m) then
       reg_note_on <= next_reg_note_on;
 
     end if;
@@ -136,7 +133,7 @@ begin
 				reg_note(i) <= "0000000";
 			end loop;
 
-    elsif rising_edge(clk) then
+    elsif rising_edge(clk_6m) then
       reg_note <= next_reg_note;
 
     end if;
@@ -150,7 +147,7 @@ begin
 				reg_velocity(i) <= "0000000";
 			end loop;
 
-    elsif rising_edge(clk) then
+    elsif rising_edge(clk_6m) then
       reg_velocity <= next_reg_velocity;
 
     end if;
@@ -170,7 +167,7 @@ begin
 	 next_status_reg <= status_reg;
 	 next_data1_reg <= data1_reg;
 	 next_data2_reg <= data2_reg;
-	 note_valid		<= '0';
+	 new_data_flag		<= '0';
 	 
 		case fsm_status is
 		
@@ -199,7 +196,7 @@ begin
 				if (rx_data_rdy) then
 					next_data2_reg <= rx_data(6 downto 0);
 					next_fsm_status <= WAIT_STATUS;
-					note_valid		<= '1';
+					new_data_flag		<= '1';
 				end if;
 				
 			when others =>
